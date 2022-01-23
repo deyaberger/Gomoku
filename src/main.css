@@ -126,8 +126,9 @@ body {
 }
 
 .suggested_stone {
-  animation: pulse 2s infinite;
+  animation: pulse 0.5s infinite;
   background-clip: border-box;
+  animation-direction: alternate;
   background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
 }
 
