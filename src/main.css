@@ -121,24 +121,24 @@ body {
   background: linear-gradient(145deg, #f6cfa6, #000000);
 }
 
-.suggested_black {
-  animation: pulse 5s infinite;
-}
-
 .white {
   background: linear-gradient(145deg, #ffffff, #f6cfa6);
 }
 
-.suggested_white {
-  background: linear-gradient(145deg, #ffffff, green);
+.suggested_stone {
+  animation: pulse 2s infinite;
+  background-clip: border-box;
+  background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
 }
 
 @keyframes pulse {
   from {
-    background-color: #f6cfa6;
+    width: calc(100% / 2.5);
+    height: calc(100% / 2.5);
   }
   to {
-    background-color: #0000004d;
+    width: calc(100% / 1.8);
+    height: calc(100% / 1.8);
   }
 }
 

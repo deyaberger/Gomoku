@@ -84,16 +84,19 @@ export default class thisView {
 
 	place_stone(row, column, mark)
 	{
-	  const stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
-
-		if (stone)
+	  var stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
+	
+		if (!stone)
 		{
-			stone.classList.remove("void");
-			stone.classList.add("stone");
-			stone.classList.add(mark);
-
-			this.html_board.appendChild(stone);
+			var stone = document.querySelector("[class = 'intersection suggested_stone'][row = '" + row + "'][col = '" + column + "']");
+			 if (!stone) {return;}
 		}
+		stone.classList.remove("void");
+		stone.classList.remove("suggested_stone");
+		stone.classList.add("stone");
+		stone.classList.add(mark);
+
+		this.html_board.appendChild(stone);
 	};
 	
 	place_suggestion(row, column, mark)
@@ -104,18 +107,15 @@ export default class thisView {
 		{
 			suggested_stone.classList.remove("void");
 			suggested_stone.classList.add("suggested_stone");
-			suggested_stone.classList.add("suggested_" + mark);
 			this.html_board.appendChild(suggested_stone);
 		}
 	}
 
 	remove_suggestions()
 	{
-		document.querySelectorAll(".intersection,.suggested_stone,.suggested_black,.suggested_white").forEach(
+		document.querySelectorAll(".intersection,.suggested_stone").forEach(
 			suggestion => {
 				suggestion.classList.remove("suggested_stone");
-				suggestion.classList.remove("suggested_black");
-				suggestion.classList.remove("suggested_white");
 				suggestion.classList.add("void");
 			}
 		);
@@ -207,6 +207,7 @@ export default class thisView {
 				inter.classList.remove("black");
 				inter.classList.remove("white");
 				inter.classList.remove("illegal");
+				inter.classList.remove("suggested_stone");
 				inter.classList.add("void");
 			});
 	}
