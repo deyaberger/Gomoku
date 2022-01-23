@@ -168,8 +168,10 @@ body {
   align-items: center;
 }
 
-text {
-  font-weight: bold;
+.text_captures {
+  padding-top: 190%;
+  text-align: center;
+  /* font-weight: bold; */
 }
 
 .white_player_captures {
