@@ -5,6 +5,8 @@ export default class thisView {
 		this.root = root;
 		this.turn = "white";
 		this.cpu = false;
+		this.b_captures = 0;
+		this.w_captures = 0;
 		this.html_board = document.querySelector(".real_board");
 		this.place_all_intersections();
 		
@@ -145,6 +147,67 @@ export default class thisView {
 		console.log("placing stone", this.turn)
 	}
 
+	update_captures(captures, mark) {
+		if (mark == "white")
+		{
+			this.w_captures = captures;
+		}
+		else if (mark == "black")
+		{
+			this.b_captures = captures;
+		}
+		var capture_nb = document.querySelector("div." + mark + "_player_captures");
+		console.log(capture_nb);
+		capture_nb.querySelector("div.num").textContent = Number(captures) * 2;
+
+		var color = '#4CFF33';
+		var pixels = 0;
+		if (captures >= 5) {
+			pixels = 0;
+		}
+		else if(captures < 5 && captures >= 4){
+			pixels = 40;
+		}
+		else if(captures < 4 && captures >= 3){
+			pixels = 80;
+		}
+		else if (captures < 3 && captures >= 2){
+			pixels = 120;
+		}
+		else if (captures < 2 && captures >= 1){
+			pixels = 160;
+		}
+		else if (captures < 1 && captures >= 0){
+			pixels = 185;
+		}
+	
+		console.log("color", color);
+		
+		$('.' + mark + '_player_captures .column').css({background: color});
+		
+		$('.' + mark + '_player_captures .column').animate({
+			height: (captures * 2) * 10 + '%',
+		});
+	
+		$('.' + mark + '_player_captures .num').css({'padding-top': pixels + 'px'});
+	
+		$('.' + mark + '_player_captures .num').animate({'padding-top': pixels + 'px'});
+	}
+
+	init_captures() {
+		$('.column').css({
+			height: '0%',
+			background: '#90a4ae',
+		});
+		$('.num').css({
+			'padding-top': '185px',
+		});
+		document.querySelectorAll(".num").forEach( number => {
+			number.textContent = '0';
+		});
+	}
+
+
 	update(data) {
 		console.log(data.type2);
 		if (data.type2 == "player_move")
@@ -201,18 +264,30 @@ export default class thisView {
 			this.place_suggestion(i, j, this.turn);
 
 		}
+		if (data.b_captures && this.b_captures != data.b_captures)
+		{
+			this.update_captures(data.b_captures, "black");
+		}
+		if (data.w_captures && this.w_captures != data.w_captures)
+		{
+			this.update_captures(data.w_captures, "white");
+		}
 	}
 
 	restart() {
 		
 		var non_void = document.querySelectorAll(".intersection,.stone,.black,.white").forEach(
 			inter => {
-				inter.classList.remove("stone");
-				inter.classList.remove("black");
-				inter.classList.remove("white");
-				inter.classList.remove("illegal");
-				inter.classList.remove("suggested_stone");
-				inter.classList.add("void");
+				if (!inter.classList.contains("forever_stone"))
+				{
+					inter.classList.remove("stone");
+					inter.classList.remove("black");
+					inter.classList.remove("white");
+					inter.classList.remove("illegal");
+					inter.classList.remove("suggested_stone");
+					inter.classList.add("void");
+				}
 			});
+		this.init_captures();
 	}
 }

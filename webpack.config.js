@@ -19,7 +19,22 @@ module.exports = {
 	  {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
-      }
+      },
+	  {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
+        ],
+      },
+	  {
+		test: /\.(jpe?g|png|gif|svg)$/i,
+		type: 'asset/resource',
+	  },
     ]
   },
   plugins: [

@@ -19,3 +19,5 @@ gameview.onRestartClick = function() {
 	gameview.restart();
 	ws.restart(gameview);
 }
+
+
