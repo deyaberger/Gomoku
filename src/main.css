@@ -13,10 +13,6 @@ body {
   background-color: #c1e3e7;
 }
 
-.header > * {
-  color: black;
-}
-
 .header__turn {
   padding: 12px;
 }
@@ -26,16 +22,6 @@ body {
   flex-grow: 1;
   text-align: center;
 }
-
-/* .header__restart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  outline: none;
-  background: none;
-  cursor: pointer;
-} */
 
 .table {
   width: 720px;
@@ -239,12 +225,13 @@ button:hover {
   background-color: #e2f1f3;
 }
 
-.button:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-
 .header__about {
   margin-right: 10px;
+}
+
+.header__turn > .forever_stone {
+  background: linear-gradient(145deg, #ffffff, #f6cfa6);
+  left: 0%;
+  text-align: center;
+  display: inline-block;
 }
