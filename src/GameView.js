@@ -161,6 +161,10 @@ export default class thisView {
 				{
 					this.place_illegal(i, j);
 				}
+				else if (data.white_board[index] == "0" && data.black_board[index] == "0")
+				{
+					this.place_void(i, j);
+				}
 			}
 		}
 		else if (data.type2 == "AI_move")
