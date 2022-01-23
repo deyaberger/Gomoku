@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script><script  src="./index.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- <script type="module" src = "./index.js"></script> -->
+	<!-- <link rel = "stylesheet" href = "./main.css"> -->
+</head>
+
+<body>
+	<div id = "app">
+		<div class = "header">
+			<div class = "header__turn">Whites' turn</div>
+			<div class = "header__status">In Progress</div>
+			<button type = "button" class = "header__about">
+				<i class="material-icons">about</i>
+			</button>
+			<button type = "button" class = "header__restart">
+				<i class="material-icons">restart</i>
+			</button>
+		</div>
+		<div class='table'>
+			<div class='visible_board'></div>
+			<div class='real_board'>
+				<div class='star' style='grid-column-start: 4; grid-column-end: 6; grid-row-start: 4; grid-row-end: 6;'></div>
+				<div class='star' style='grid-column-start: 4; grid-column-end: 6; grid-row-start: 10; grid-row-end: 12;'></div>
+				<div class='star' style='grid-column-start: 4; grid-column-end: 6; grid-row-start: 16; grid-row-end: 18;'></div>
+				<div class='star' style='grid-column-start: 10; grid-column-end: 12; grid-row-start: 4; grid-row-end: 6;'></div>
+				<div class='star' style='grid-column-start: 10; grid-column-end: 12; grid-row-start: 10; grid-row-end: 12;'></div>
+				<div class='star' style='grid-column-start: 10; grid-column-end: 12; grid-row-start: 16; grid-row-end: 18;'></div>
+				<div class='star' style='grid-column-start: 16; grid-column-end: 18; grid-row-start: 4; grid-row-end: 6;'></div>
+				<div class='star' style='grid-column-start: 16; grid-column-end: 18; grid-row-start: 10; grid-row-end: 12;'></div>
+				<div class='star' style='grid-column-start: 16; grid-column-end: 18; grid-row-start: 16; grid-row-end: 18;'></div>
+				<div class = "infos" style='grid-column-start: 21; grid-column-end: 27; grid-row-start: 1; grid-row-end: 21;'>
+					<div class = "status">In progress</div>
+					<div class = "player1">Player 1
+						<div class = "captures">
+							<div class="column-wrapper">
+								<div class="column"></div>
+							</div>
+								<div class = "num">0</div>
+							  <!-- <div class="percentage">--</div> -->
+						</div>
+						<div class = "time"></div>
+					</div>
+					<div class = "player2">Player 2
+						<div class = "captures"></div>
+						<div class = "time"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

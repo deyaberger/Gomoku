@@ -1,0 +1,194 @@
+body {
+  background: #74adb4;
+}
+
+.header {
+  display: flex;
+  width: 720px;
+  padding: calc(720px / 18);
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  background-color: #c1e3e7;
+}
+
+.header > * {
+  color: black;
+}
+
+.header__turn {
+  padding: 12px;
+}
+
+.header__status {
+  padding: 12px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.header__restart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
+.table {
+  width: 720px;
+  height: 720px;
+  margin: 0 auto;
+  padding: calc(720px / 18);
+  background-color: #f1b06c;
+  background-image: url(https://raw.githubusercontent.com/naush/goban/master/wood-pattern.png);
+  position: relative;
+}
+
+.visible_board {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(36, calc(720px / 36));
+  grid-template-rows: repeat(36, calc(720px / 36));
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+  background-size: calc(720px / 18) calc(720px / 18);
+  background-image: linear-gradient(to right, grey 1px, transparent 1px),
+    linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+
+.real_board {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(36, calc(720px / 18));
+  grid-template-rows: repeat(36, calc(720px / 18));
+  background-size: calc(720px / 18) calc(720px / 18);
+  /* border-right: 1px solid violet;
+  border-bottom: 1px solid violet;
+  background-image: linear-gradient(to right, violet 1px, transparent 1px),
+    linear-gradient(to bottom, violet 1px, transparent 1px); */
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.star {
+  width: calc(100% / 8);
+  height: calc(100% / 8);
+  border-radius: 50%;
+  background-color: grey;
+  align-self: center;
+  justify-self: center;
+}
+
+.intersection {
+  border-radius: 50%;
+  align-self: center;
+  justify-self: center;
+}
+
+.void {
+  cursor: pointer;
+  width: calc(100% / 8);
+  height: calc(100% / 8);
+}
+
+.illegal {
+  cursor: unset;
+}
+
+.stone {
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25),
+    -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
+  width: calc(100% / 2);
+  height: calc(100% / 2);
+  cursor: unset;
+  pointer-events: none;
+}
+
+.suggested_stone {
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25),
+    -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
+  width: calc(100% / 2);
+  height: calc(100% / 2);
+  cursor: pointer;
+}
+
+.black {
+  background: linear-gradient(145deg, #f6cfa6, #000000);
+}
+
+.suggested_black {
+  animation: pulse 5s infinite;
+}
+
+.white {
+  background: linear-gradient(145deg, #ffffff, #f6cfa6);
+}
+
+.suggested_white {
+  background: linear-gradient(145deg, #ffffff, green);
+}
+
+@keyframes pulse {
+  from {
+    background-color: #f6cfa6;
+  }
+  to {
+    background-color: #0000004d;
+  }
+}
+
+.infos {
+  background-color: red;
+  z-index: 1;
+}
+
+.status {
+  /* padding: 12px; */
+  flex-grow: 1;
+  text-align: center;
+  background-color: blue;
+}
+
+.player1 {
+  width: 50%;
+  height: 70%;
+  background-color: blueviolet;
+}
+
+.player2 {
+  width: 50%;
+  height: 70%;
+  background-color: green;
+  transform: translate(100%, -100%);
+}
+
+.captures {
+  position: relative;
+  padding-top: 20%;
+}
+
+.column-wrapper {
+  height: 200px;
+  width: 20px;
+  background: #cfd8dc;
+  transform: rotate(180deg);
+  position: absolute;
+  left: 50%;
+}
+
+.column {
+  width: 20px;
+  height: 100%;
+  background: #90a4ae;
+}
+
+.num {
+  position: absolute;
+  left: 20%;
+  padding-top: 185px;
+}
