@@ -35,6 +35,20 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
+	  {
+        test: /\.html$/,
+        use: [
+			{
+			  loader: 'file-loader',
+			  options: {
+				name : "[name].[ext]",
+				outputPath: '/',
+				publicPath: '/',
+			  },
+			},
+		  ],
+		  exclude : path.resolve(__dirname, "src/index.html"),
+      },
     ]
   },
   plugins: [

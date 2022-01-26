@@ -1,6 +1,6 @@
 import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 
-export default class thisView {
+export default class GameView {
 	constructor(root) {
 		this.root = root;
 		this.turn = "white";

@@ -1,9 +1,0 @@
-{
-		test: /\.(jpeg|jpg|png|gif|svg)$/i,
-		type: 'file-loader',
-		options: {
-			name: '[name].[ext]',
-			outputPath: 'img',
-			publicPath: 'img',
-		}
-	  },
