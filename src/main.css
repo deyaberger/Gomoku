@@ -152,7 +152,7 @@ body {
 }
 
 .header_infos {
-  content: url("./logo_captures.png");
+  content: url("./img/logo_captures.png");
   height: 8%;
   padding-left: 35%;
   padding-bottom: 10%;
