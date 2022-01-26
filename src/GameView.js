@@ -4,7 +4,7 @@ export default class thisView {
 	constructor(root) {
 		this.root = root;
 		this.turn = "white";
-		this.cpu = false;
+		this.cpu = true;
 		this.b_captures = 0;
 		this.w_captures = 0;
 		this.html_board = document.querySelector(".real_board");
@@ -125,7 +125,23 @@ export default class thisView {
 
 	update_winner(winner)
 	{
-	  document.querySelector("[class = 'header__status']").textContent = winner + ' wins !!!';
+		$('.header__turn').css({
+			'display': 'none',
+			});
+
+	  document.querySelector("[class = 'status']").textContent = winner + ' wins !!!';
+		
+	  var color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
+	  if (winner == 'black')
+		  {color = 'linear-gradient(145deg, #f6cfa6, #000000)';}
+
+	  $('.header__status .forever_stone').css({
+		  background: color,
+		  'display' : 'inline',
+		});
+	  $('.status').css({
+		  'margin-left': '10px',
+		  });
 	};
 
 	remove_clicks()
@@ -139,7 +155,7 @@ export default class thisView {
 
 	nextTurn(){
 		this.turn = this.turn == "black" ? "white" : "black";
-		document.querySelector("[class = 'header__turn']").textContent = this.turn + "'s turn";
+		document.querySelector("[class = 'turn']").textContent = this.turn + "'s turn";
 	}
 
 	makeMove(i, j) {
@@ -289,5 +305,19 @@ export default class thisView {
 				}
 			});
 		this.init_captures();
+		$('.header__turn').css({
+			'display': 'flex',
+			});
+
+		$('.header__status > .forever_stone').css({
+			'display': 'none',
+			});
+		
+		$('.status').css({
+			'margin-left': '0px',
+			});
+		
+		document.querySelector("[class = 'status']").textContent = '... In Progress ...';
+
 	}
 }

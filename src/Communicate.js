@@ -5,7 +5,7 @@ export default class Ws {
 		this.url = "ws://192.168.1.79:8080";
 		this.starting_data = JSON.stringify({
 			"type"	: "start",
-			"cpu"	: false,
+			"cpu"	: true,
 			"depth"	: 7
 		});
 	}
