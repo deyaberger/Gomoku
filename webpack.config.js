@@ -32,9 +32,9 @@ module.exports = {
         ],
       },
 	  {
-		test: /\.(jpe?g|png|gif|svg)$/i,
-		type: 'asset/resource',
-	  },
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ]
   },
   plugins: [
