@@ -1,62 +1,80 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, "src/index.js"),
+  entry: {
+	  main : path.join(__dirname, "src/index.js"),
+	  form : path.join(__dirname, "src/form/form.js"),
+	  game : path.join(__dirname, "src/game/game.js"),
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'test.bundle.js'
+    filename: '[name].bundle.js'
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-	  {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
-	  {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              limit: 10000,
-            },
-          },
-        ],
-      },
-	  {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-      },
-	  {
-        test: /\.html$/,
-        use: [
-			{
-			  loader: 'file-loader',
-			  options: {
-				name : "[name].[ext]",
-				outputPath: '/',
-				publicPath: '/',
+		{
+		  test: /\.js$/,
+		  exclude: /node_modules/,
+		  use: {
+			loader: "babel-loader"
+		  }
+		},
+		{
+			test: /\.css$/,
+			use: ["style-loader", "css-loader"]
+		  },
+		  {
+			test: /\.svg$/,
+			use: [
+			  {
+				loader: 'svg-url-loader',
+				options: {
+				  limit: 10000,
+				},
 			  },
-			},
-		  ],
-		  exclude : path.resolve(__dirname, "src/index.html"),
-      },
-    ]
+			],
+		  },
+		  {
+			test: /\.(png|svg|jpg|jpeg|gif)$/i,
+			type: 'asset/resource',
+		  },
+	  ]
   },
   plugins: [
+	  new CleanWebpackPlugin(),
+	  new CopyWebpackPlugin({
+		patterns: [
+			{
+				from: path.join(__dirname, "./src/img/"),
+				to: "img",
+			}
+		]
+	  }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "src/index.html")
-    })
+		filename : "index.html",
+		template: path.join(__dirname, "./src/index.html"),
+		chunks: ["main"]
+	}),
+	new HtmlWebpackPlugin({
+		filename : "computer.html",
+		template: path.join(__dirname, "./src/form/computer.html"),
+		chunks: ["form"]
+	}),
+	new HtmlWebpackPlugin({
+		filename : "humans.html",
+		template: path.join(__dirname, "./src/form/humans.html"),
+		chunks: ["form"]
+	}),
+	new HtmlWebpackPlugin({
+		filename : "game.html",
+		template: path.join(__dirname, "./src/game/game.html"),
+		chunks: ["game"]
+	}),
   ],
-  devtool: "source-map",
+   devtool: "source-map",
   mode: "development",
   devServer: {
     static: path.resolve(__dirname, './dist'),

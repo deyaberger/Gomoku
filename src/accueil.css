@@ -16,6 +16,7 @@ h1 {
 
 img {
   max-height: 820px;
+  width: 100%;
 }
 
 .computer {
@@ -23,19 +24,9 @@ img {
   position: relative;
 }
 
-.computer > img {
-  content: url("./img/go9.jpeg");
-  width: 100%;
-}
-
 .humans {
   display: inline-block;
   position: relative;
-}
-
-.humans > img {
-  content: url("./img/go7.jpeg");
-  width: 100%;
 }
 
 .btn {

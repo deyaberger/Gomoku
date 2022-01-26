@@ -1,4 +1,4 @@
-import {from_2d_to_nb} from "./Utils.js";
+import {from_2d_to_nb} from "./game/Utils.js";
 
 export default class Ws {
 	constructor() { // ADD starting data at some point
