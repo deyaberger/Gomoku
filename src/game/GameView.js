@@ -157,7 +157,7 @@ export default class GameView {
 
 	nextTurn(){
 		this.turn = this.turn == "black" ? "white" : "black";
-		document.querySelector("[class = 'turn']").textContent = this.turn + "'s turn";
+		document.querySelector("[class = 'turn']").textContent = this.turn + "s' turn";
 		var color = 'linear-gradient(145deg, #f6cfa6, #000000)';
 		if (this.turn == 'white') {
 			color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
