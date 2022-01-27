@@ -3,7 +3,7 @@ import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 export default class GameView {
 	constructor(root, form) {
 		this.root = root;
-		this.turn = "white";
+		this.turn = "black";
 		this.cpu = form.cpu;
 		this.player1 = form.player1;
 		this.player2 = form.player2;
@@ -158,6 +158,13 @@ export default class GameView {
 	nextTurn(){
 		this.turn = this.turn == "black" ? "white" : "black";
 		document.querySelector("[class = 'turn']").textContent = this.turn + "'s turn";
+		var color = 'linear-gradient(145deg, #f6cfa6, #000000)';
+		if (this.turn == 'white') {
+			color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
+		}
+		$(".header__turn > .forever_stone").css({
+  			background: color,
+		})
 	}
 
 	makeMove(i, j) {
