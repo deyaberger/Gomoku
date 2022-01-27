@@ -3,7 +3,6 @@ import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 export default class GameView {
 	constructor(root, form) {
 		this.root = root;
-		this.turn = "black";
 		this.cpu = form.cpu;
 		this.player1 = form.player1;
 		this.player2 = form.player2;
@@ -29,6 +28,21 @@ export default class GameView {
                 this.onRestartClick();
             }
         });
+		this.init_turn();
+	}
+
+	init_turn(){
+		this.turn = "black";
+		var content = this.turn + "s' turn";
+		if (this.turn == "black" && this.player1 != this.turn)
+		{
+			content = this.player1 + "'s turn";
+		}
+		else if (this.turn == "white" && this.player2 != this.turn)
+		{
+			content = this.player2 + "'s turn";
+		};
+		document.querySelector("[class = 'turn']").textContent = content;
 	}
 
 	place_intersection(row, column)
@@ -154,10 +168,17 @@ export default class GameView {
 			});
 	}
 
-
-	nextTurn(){
-		this.turn = this.turn == "black" ? "white" : "black";
-		document.querySelector("[class = 'turn']").textContent = this.turn + "s' turn";
+	update_turn(){
+		var content = this.turn + "s' turn";
+		if (this.turn == "black" && this.player1 != this.turn)
+		{
+			content = this.player1 + "'s turn";
+		}
+		else if (this.turn == "white" && this.player2 != this.turn)
+		{
+			content = this.player2 + "'s turn";
+		};
+		document.querySelector("[class = 'turn']").textContent = content;
 		var color = 'linear-gradient(145deg, #f6cfa6, #000000)';
 		if (this.turn == 'white') {
 			color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
@@ -165,6 +186,12 @@ export default class GameView {
 		$(".header__turn > .forever_stone").css({
   			background: color,
 		})
+	}
+
+
+	nextTurn(){
+		this.turn = this.turn == "black" ? "white" : "black";
+		this.update_turn();
 	}
 
 	makeMove(i, j) {
@@ -314,6 +341,8 @@ export default class GameView {
 				}
 			});
 		this.init_captures();
+		this.init_turn();
+		this.update_turn();
 		$('.header__turn').css({
 			'display': 'flex',
 			});
