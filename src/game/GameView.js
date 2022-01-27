@@ -1,10 +1,12 @@
 import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 
 export default class GameView {
-	constructor(root) {
+	constructor(root, form) {
 		this.root = root;
 		this.turn = "white";
-		this.cpu = true;
+		this.cpu = form.cpu;
+		this.player1 = form.player1;
+		this.player2 = form.player2;
 		this.b_captures = 0;
 		this.w_captures = 0;
 		this.html_board = document.querySelector(".real_board");

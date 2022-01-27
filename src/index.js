@@ -22,16 +22,3 @@ ws.onOpen = function() {
 		location.href = "humans.html";
 	};
 }
-
-sessionStorage.setItem("websocket", JSON.stringify(ws));
-
-
-// document.querySelector(".computer > button").addEventListener("click", function() {
-// 	var form = new Form(true);
-// 	console.log("form.gpu = ", form.gpu);
-// });
-
-// document.querySelector(".humans > button").addEventListener("click", function() {
-// 	var form = new Form(false);
-// 	console.log("form.gpu = ", form.gpu);
-// });
