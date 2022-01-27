@@ -41,7 +41,6 @@ img {
   text-decoration: none;
   text-transform: uppercase;
   color: #000;
-  cursor: pointer;
   border: 3px solid;
   padding: 0.25em 0.5em;
   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
@@ -51,6 +50,16 @@ img {
   touch-action: manipulation;
 }
 
-.computer .btn:hover {
+.on {
+  background-color: rgb(228, 228, 228);
+  cursor: pointer;
+}
+
+.off {
+  background-color: rgba(128, 128, 128, 0.445);
+  cursor: not-allowed;
+}
+
+.on:hover {
   background-color: white;
 }

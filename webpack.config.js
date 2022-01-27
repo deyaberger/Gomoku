@@ -71,7 +71,7 @@ module.exports = {
 	new HtmlWebpackPlugin({
 		filename : "game.html",
 		template: path.join(__dirname, "./src/game/game.html"),
-		chunks: ["game"]
+		chunks: ["game", "form"]
 	}),
   ],
    devtool: "source-map",

@@ -2,6 +2,8 @@ import "./game.css";
 import Ws from "../Communicate.js";
 import GameView from "./GameView.js";
 
+console.log("game");
+
 
 let gameview = new GameView(document.getElementById("app"));
 
