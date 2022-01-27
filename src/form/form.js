@@ -1,4 +1,4 @@
-import "./form.css";
+import "./form.scss";
 
 // Class form that will help to comunicate with the server
 export default class Form {

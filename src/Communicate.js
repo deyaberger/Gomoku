@@ -4,6 +4,8 @@ export default class Ws {
 	constructor() { // ADD starting data at some point
 		this.url = "ws://192.168.1.79:8080";
 		this.onOpen = undefined;
+		this.onError = undefined;
+		this.onClose = undefined;
 	}
 
 	new_connection(gameview) {
@@ -12,6 +14,18 @@ export default class Ws {
 		this.co.onopen = () => {
 			if (this.onOpen){
 				this.onOpen();
+			}
+         };
+
+		 this.co.onerror = () => {
+			if (this.onError){
+				this.onError();
+			}
+         };
+
+		 this.co.onclose = () => {
+			if (this.onClose){
+				this.onClose();
 			}
          };
 		this.receive_message(gameview);

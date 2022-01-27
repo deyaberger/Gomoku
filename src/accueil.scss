@@ -1,0 +1,147 @@
+body {
+  background: #74adb4;
+}
+
+h1 {
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+  color: #dbe6e6;
+}
+
+.two_options {
+  width: 100%;
+  display: table;
+  text-align: center;
+}
+
+img {
+  max-height: 820px;
+  width: 100%;
+}
+
+.computer {
+  display: inline-block;
+  position: relative;
+}
+
+.humans {
+  display: inline-block;
+  position: relative;
+}
+
+.btn {
+  font-family: "Open Sans", sans-serif;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
+    5px 5px 0px 0px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.on {
+  background-color: rgb(228, 228, 228);
+  cursor: pointer;
+}
+
+.off {
+  background-color: rgba(128, 128, 128, 0.445);
+  cursor: not-allowed;
+}
+
+.on:hover {
+  background-color: white;
+}
+
+.customAlert {
+  display: none;
+  position: fixed;
+  max-width: 27%;
+  min-width: 250px !important;
+  min-height: 20%;
+  height: 250px;
+  left: 50%;
+  top: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-left: -12.5%;
+  margin-top: -5.2%;
+  background: #89a7ace3;
+
+  @media all and (max-width: 1300px) {
+    .message {
+      font-size: 14px !important;
+    }
+    input[type="button"] {
+      height: 15% !important;
+    }
+  }
+
+  .message {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 5px;
+    color: white;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: justify;
+  }
+
+  input[type="button"] {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 50%;
+    height: 36px;
+    margin-top: -45px;
+    margin-left: -25%;
+    outline: 0;
+    border: 0;
+    background: #9bdfebe3;
+    color: white;
+    &:hover {
+      transition: 0.3s;
+      cursor: pointer;
+      background: lighten(#9bdfeb, 5%);
+    }
+  }
+}
+
+.rab {
+  width: 200px;
+  height: 30px;
+  outline: 0;
+  border: 0;
+  color: white;
+  background: darken(#04b486, 5%);
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

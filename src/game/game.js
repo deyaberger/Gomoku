@@ -1,4 +1,4 @@
-import "./game.css";
+import "./game.scss";
 import GameView from "./GameView.js";
 import Ws from "../Communicate.js";
 
@@ -22,5 +22,4 @@ gameview.onRestartClick = function() {
 	gameview.restart();
 	ws.restart(gameview);
 }
-
 
