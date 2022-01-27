@@ -166,13 +166,13 @@ body {
   padding-top: 190%;
   text-align: center;
   text-transform: uppercase;
-  /* font-weight: bold; */
 }
 
 .white_player_captures {
   width: 50%;
   height: 70%;
   text-align: center;
+  margin-bottom: 0%;
 }
 
 .black_player_captures {
@@ -260,4 +260,18 @@ button:hover {
 .header__status > .status {
   align-self: center;
   justify-self: center;
+}
+
+.time > img {
+  padding-bottom: 10%;
+  width: 40%;
+}
+
+.time {
+  padding: 8%;
+  position: absolute;
+}
+
+.time_text {
+  color: blue;
 }

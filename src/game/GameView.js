@@ -29,6 +29,7 @@ export default class GameView {
             }
         });
 		this.init_turn();
+
 	}
 
 	init_turn(){
@@ -168,6 +169,10 @@ export default class GameView {
 			});
 	}
 
+	update_time(time) {
+		document.querySelector(".time_text").textContent = time + ' ms';
+	}
+
 	update_turn(){
 		var content = this.turn + "s' turn";
 		if (this.turn == "black" && this.player1 != this.turn)
@@ -302,8 +307,11 @@ export default class GameView {
 				}
 			}
 			console.log("Type: " + data.type2);
+			this.update_time(data.thinking_time);
+
 			// console.log(data.black_board)
 		}
+
 		if (data.winner == "black" || data.winner == "white")
 		{
 			this.update_winner(data.winner);
@@ -314,6 +322,8 @@ export default class GameView {
 			console.log("TURN = " + this.turn);
 			var {i, j} = from_nb_to_2d(data.suggested_move);
 			this.place_suggestion(i, j, this.turn);
+			this.update_time(data.thinking_time);
+
 
 		}
 		if (data.b_captures && this.b_captures != data.b_captures)
@@ -343,6 +353,7 @@ export default class GameView {
 		this.init_captures();
 		this.init_turn();
 		this.update_turn();
+		document.querySelector(".time_text").textContent = 'None yet';
 		$('.header__turn').css({
 			'display': 'flex',
 			});
