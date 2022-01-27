@@ -170,7 +170,8 @@ export default class GameView {
 	}
 
 	update_time(time) {
-		document.querySelector(".time_text").textContent = time + ' ms';
+		var real_time = Number(time) / 1e6;
+		document.querySelector(".time_text").textContent = (Math.round(real_time * 100) / 100) + ' s';
 	}
 
 	update_turn(){
