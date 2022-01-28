@@ -83,16 +83,23 @@ body {
   border-radius: 50%;
   align-self: center;
   justify-self: center;
+  pointer-events: none;
 }
 
 .void {
   cursor: pointer;
+  pointer-events: unset;
   width: calc(100% / 8);
   height: calc(100% / 8);
 }
 
+.off {
+  pointer-events: none;
+  background-color: red;
+}
+
 .illegal {
-  cursor: unset;
+  pointer-events: none;
 }
 
 .stone {
@@ -100,8 +107,8 @@ body {
     -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
   width: calc(100% / 2);
   height: calc(100% / 2);
-  cursor: unset;
-  pointer-events: none;
+  //   cursor: unset;
+  //   pointer-events: none;
 }
 
 .suggested_stone {
@@ -268,7 +275,8 @@ button:hover {
 }
 
 .time {
-  padding: 8%;
+  padding-top: 8%;
+  padding-left: 8%;
   position: absolute;
 }
 

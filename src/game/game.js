@@ -3,10 +3,11 @@ import GameView from "./GameView.js";
 import Ws from "../Communicate.js";
 
 
-let form = JSON.parse(sessionStorage.getItem("form"));
+var form = JSON.parse(sessionStorage.getItem("form"));
+
 let ws = new Ws();
 
-let gameview = new GameView(document.getElementById("app"), form);
+let gameview = new GameView(form);
 
 ws.new_connection(gameview);
 ws.onOpen = function() {
@@ -22,4 +23,7 @@ gameview.onRestartClick = function() {
 	gameview.restart();
 	ws.restart(gameview);
 }
+
+// gameview.onRestartClick = function() {
+// }
 

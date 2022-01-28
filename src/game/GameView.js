@@ -1,49 +1,110 @@
 import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 
-export default class GameView {
-	constructor(root, form) {
-		this.root = root;
-		this.cpu = form.cpu;
-		this.player1 = form.player1;
-		this.player2 = form.player2;
+class Infos {
+	constructor(player1, player2) {
+
+		this.turn = "black";
+		this.player1 = player1;
+		this.player2 = player2;
+		this.update_turn_text(this.turn);
 		this.b_captures = 0;
 		this.w_captures = 0;
-		this.html_board = document.querySelector(".real_board");
-		this.place_all_intersections();
-		
-		this.onInterClick = undefined;
-		this.onRestartClick = undefined;
-
-		this.root.querySelectorAll(".intersection").forEach(
-			inter => {
-            inter.addEventListener("click", () => {
-                if (this.onInterClick) {
-                    this.onInterClick(inter.getAttribute("row"), inter.getAttribute("col"));
-                }
-            });
-        });
-
-		this.root.querySelector(".header__restart").addEventListener("click", () => {
-            if (this.onRestartClick) {
-                this.onRestartClick();
-            }
-        });
-		this.init_turn();
 
 	}
 
-	init_turn(){
-		this.turn = "black";
-		var content = this.turn + "s' turn";
-		if (this.turn == "black" && this.player1 != this.turn)
+	update_turn_text(turn){
+		this.turn_text = this.turn + "s' turn";
+		if (turn == "black" && this.player1 != turn)
 		{
-			content = this.player1 + "'s turn";
+			this.turn_text = this.player1 + "'s turn";
 		}
-		else if (this.turn == "white" && this.player2 != this.turn)
+		else if (turn == "white" && this.player2 != turn)
 		{
-			content = this.player2 + "'s turn";
+			this.turn_text = this.player2 + "'s turn";
 		};
-		document.querySelector("[class = 'turn']").textContent = content;
+		document.querySelector("[class = 'turn']").textContent = this.turn_text;
+	}
+
+	
+	update_turn_stone(turn){
+		var color = turn == 'white' ? 'linear-gradient(145deg, #ffffff, #f6cfa6)' : 'linear-gradient(145deg, #f6cfa6, #000000)';
+		$(".header__turn > .forever_stone").css({
+  			background: color,
+		})
+	}
+
+
+	nextTurn(){
+		this.turn = this.turn == "black" ? "white" : "black";
+		this.update_turn_text(this.turn);
+		this.update_turn_stone(this.turn);
+	}
+	
+
+	update_captures_appearance(mark, captures)
+	{
+		let capture_nb = document.querySelector("div." + mark + "_player_captures");
+		capture_nb.querySelector("div.num").textContent = Number(captures) * 2;
+	
+		const color = '#4CFF33';
+		var pixels = 0;
+
+		if(captures < 5 && captures >= 4){
+			pixels = 40;
+		}
+		else if(captures < 4 && captures >= 3){
+			pixels = 80;
+		}
+		else if (captures < 3 && captures >= 2){
+			pixels = 120;
+		}
+		else if (captures < 2 && captures >= 1){
+			pixels = 160;
+		}
+		else if (captures < 1 && captures >= 0){
+			pixels = 185;
+		}
+
+		$('.' + mark + '_player_captures .column').css({background: color});
+		
+		$('.' + mark + '_player_captures .column').animate({
+			height: (captures * 2) * 10 + '%',
+		});
+	
+		$('.' + mark + '_player_captures .num').css({'padding-top': pixels + 'px'});
+	
+		$('.' + mark + '_player_captures .num').animate({'padding-top': pixels + 'px'});
+	}
+
+
+	update_captures(data)
+	{
+		if (data.b_captures != this.b_captures)
+		{
+			this.b_captures = data.b_captures;
+			this.update_captures_appearance('black', this.b_captures);
+		}
+		else if (data.w_captures != this.w_captures)
+		{
+			this.w_captures = data.w_captures;
+			this.update_captures_appearance('white', this.w_captures);
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	
+}
+
+
+class Board {
+	constructor() {
+
+		this.html_board = document.querySelector(".real_board");
+		this.place_all_intersections();
+
 	}
 
 	place_intersection(row, column)
@@ -73,19 +134,49 @@ export default class GameView {
 		}
 	}
 
-	place_void(row, column)
+
+	place_stone(row, column, mark)
 	{
-		const void_intersection = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
-		if (void_intersection)
+	  const stone = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
+	
+		if (!stone)
 		{
-			if (!void_intersection.classList.contains("void"))
+			console.log("ERROR when placing stone in " + row + "x" + column + "! THIS SHOULD NOT PRINT");
+			return;
+			
+		}
+		stone.classList.remove("void");
+		stone.classList.remove("off");
+		stone.classList.remove("suggested_stone");
+		stone.classList.add("stone");
+		stone.classList.add(mark);
+
+		this.html_board.appendChild(stone);
+	};
+
+	temporary_illegals(on)
+	{
+		if (on == true)
+		{
+			const voids = document.querySelectorAll("[class = 'intersection void']");
+			if (voids)
 			{
-				console.log("VOID INTERSECTION FOUND at: ", row, column);
-				console.log(void_intersection.classList);
+				voids.forEach(void_on => {
+					void_on.classList.add("off");
+				});
 			}
-			void_intersection.classList.remove(...void_intersection.classList);
-			void_intersection.classList.add("intersection");
-			void_intersection.classList.add("void");
+			
+		}
+		else if (on == false)
+		{
+			const voids_off = document.querySelectorAll("[class = 'intersection void off']");
+			if (voids_off)
+			{
+				voids_off.forEach(void_off => {
+					void_off.classList.remove("off");
+				});
+			}
+			
 		}
 	}
 
@@ -101,22 +192,135 @@ export default class GameView {
 		}
 	}
 
-	place_stone(row, column, mark)
-	{
-	  var stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
-	
-		if (!stone)
-		{
-			var stone = document.querySelector("[class = 'intersection suggested_stone'][row = '" + row + "'][col = '" + column + "']");
-			 if (!stone) {return;}
-		}
-		stone.classList.remove("void");
-		stone.classList.remove("suggested_stone");
-		stone.classList.add("stone");
-		stone.classList.add(mark);
 
-		this.html_board.appendChild(stone);
-	};
+	place_void(row, column)
+	{
+		const void_intersection = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
+		if (void_intersection && !void_intersection.classList.contains("void"))
+		{
+			void_intersection.classList.remove(...void_intersection.classList);
+			void_intersection.classList.add("intersection");
+			void_intersection.classList.add("void");
+		}
+	}
+	
+
+	update_illegals_and_captures(data, turn)
+	{
+		for (let index = (19 * 19) - 1; index > 0; index--)
+			{
+				var {i, j} = from_reverse_nb_to_2d(index);
+				if (data.illegal_board[index] == "1")
+				{
+					this.place_illegal(i, j);
+				}
+				else if (data.white_board[index] == "0" && data.black_board[index] == "0")
+				{
+					this.place_void(i, j);
+				}
+			}
+	}
+
+	update_all(data, turn)
+	{
+		console.log("UPDATING ALL");
+		for (let index = (19 * 19) - 1; index > 0; index--)
+		{
+			var {i, j} = from_reverse_nb_to_2d(index);
+			if (data.black_board[index] == "1" && data.white_board[index] == "0")
+			{
+				this.place_stone(i, j, 'black');
+			}
+			else if (data.white_board[index] == "1" && data.black_board[index] == "0")
+			{
+				this.place_stone(i, j, "white");
+			}
+			else if (data.white_board[index] == "0" && data.black_board[index] == "0")
+			{
+				this.place_void(i, j);
+			}
+		}
+	}
+
+}
+
+export default class GameView {
+	constructor(form) {
+		this.vs_ai = JSON.parse(form.data).cpu;
+		console.log("AIIII: ", this.vs_ai);
+		this.player1 = form.player1;
+		this.player2 = form.player2;
+		this.onInterClick = undefined;
+		this.onRestartClick = undefined;
+
+		this.board = new Board();
+		this.infos = new Infos(this.player1, this.player2);
+
+		document.querySelectorAll(".intersection").forEach(
+			inter => {
+            inter.addEventListener("click", () => {
+                if (this.onInterClick) {
+                    this.onInterClick(inter.getAttribute("row"), inter.getAttribute("col"));
+                }
+            });
+        });
+
+		document.querySelector(".header__restart").addEventListener("click", () => {
+            if (this.onRestartClick) {
+                this.onRestartClick();
+            }
+        });
+
+		
+	}
+
+
+	makeMove(i, j) {
+		this.board.place_stone(i, j, this.infos.turn);
+		this.board.temporary_illegals(true);
+	}
+
+
+	update(data) {
+		if (data.type2 == "player_move")
+		{
+			console.log("PLAYER MOOOOVE");
+			this.board.update_illegals_and_captures(data, this.infos.turn);
+			this.infos.update_captures(data);
+			this.infos.nextTurn();
+			if (this.vs_ai == false)
+			{
+				this.board.temporary_illegals(false);
+			}
+			
+			console.log("player_move");
+		}
+		else if (data.type2 == "AI_move" || data.type2 == "AI_move_suggestion")
+		{
+			console.log("AI MOOOOVE");
+			if (data.type2 == "AI_move")
+			{
+				this.board.update_all(data, this.infos.turn);
+				this.infos.update_captures(data);
+				this.infos.nextTurn();
+				this.board.temporary_illegals(false);
+			}
+			else if (data.type2 == "AI_move_suggestion")
+			{
+				console.log(data.type2);
+
+			}			
+		}
+
+	}
+
+
+
+
+
+
+
+
 	
 	place_suggestion(row, column, mark)
 	{
@@ -174,83 +378,8 @@ export default class GameView {
 		document.querySelector(".time_text").textContent = (Math.round(real_time * 100) / 100) + ' s';
 	}
 
-	update_turn(){
-		var content = this.turn + "s' turn";
-		if (this.turn == "black" && this.player1 != this.turn)
-		{
-			content = this.player1 + "'s turn";
-		}
-		else if (this.turn == "white" && this.player2 != this.turn)
-		{
-			content = this.player2 + "'s turn";
-		};
-		document.querySelector("[class = 'turn']").textContent = content;
-		var color = 'linear-gradient(145deg, #f6cfa6, #000000)';
-		if (this.turn == 'white') {
-			color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
-		}
-		$(".header__turn > .forever_stone").css({
-  			background: color,
-		})
-	}
 
 
-	nextTurn(){
-		this.turn = this.turn == "black" ? "white" : "black";
-		this.update_turn();
-	}
-
-	makeMove(i, j) {
-		this.place_stone(i, j, this.turn);
-		console.log("placing stone", this.turn)
-	}
-
-	update_captures(captures, mark) {
-		if (mark == "white")
-		{
-			this.w_captures = captures;
-		}
-		else if (mark == "black")
-		{
-			this.b_captures = captures;
-		}
-		var capture_nb = document.querySelector("div." + mark + "_player_captures");
-		console.log(capture_nb);
-		capture_nb.querySelector("div.num").textContent = Number(captures) * 2;
-
-		var color = '#4CFF33';
-		var pixels = 0;
-		if (captures >= 5) {
-			pixels = 0;
-		}
-		else if(captures < 5 && captures >= 4){
-			pixels = 40;
-		}
-		else if(captures < 4 && captures >= 3){
-			pixels = 80;
-		}
-		else if (captures < 3 && captures >= 2){
-			pixels = 120;
-		}
-		else if (captures < 2 && captures >= 1){
-			pixels = 160;
-		}
-		else if (captures < 1 && captures >= 0){
-			pixels = 185;
-		}
-	
-		console.log("color", color);
-		
-		$('.' + mark + '_player_captures .column').css({background: color});
-		
-		$('.' + mark + '_player_captures .column').animate({
-			height: (captures * 2) * 10 + '%',
-		});
-	
-		$('.' + mark + '_player_captures .num').css({'padding-top': pixels + 'px'});
-	
-		$('.' + mark + '_player_captures .num').animate({'padding-top': pixels + 'px'});
-	}
 
 	init_captures() {
 		$('.column').css({
@@ -266,76 +395,78 @@ export default class GameView {
 	}
 
 
-	update(data) {
-		console.log(data.type2);
-		if (data.type2 == "player_move")
-		{
-			this.nextTurn()
-			if (this.cpu == false)
-			{
-				this.remove_suggestions();
-			}
-			for (let index = (19 * 19) - 1; index > 0; index--)
-			{
-				var {i, j} = from_reverse_nb_to_2d(index);
-				if (data.illegal_board[index] == "1")
-				{
-					this.place_illegal(i, j);
-				}
-				else if (data.white_board[index] == "0" && data.black_board[index] == "0")
-				{
-					this.place_void(i, j);
-				}
-			}
-		}
-		else if (data.type2 == "AI_move")
-		{
-			this.nextTurn()
-			for (let index = (19 * 19) - 1; index > 0; index--)
-			{
-				var {i, j} = from_reverse_nb_to_2d(index);
-				if (data.black_board[index] == "1" && data.white_board[index] == "0")
-				{
-					this.place_stone(i, j, 'black');
-				}
-				else if (data.white_board[index] == "1" && data.black_board[index] == "0")
-				{
-					this.place_stone(i, j, "white");
-				}
-				else if (data.white_board[index] == "0" && data.black_board[index] == "0")
-				{
-					this.place_void(i, j);
-				}
-			}
-			console.log("Type: " + data.type2);
-			this.update_time(data.thinking_time);
+	// update(data) {
+	// 	console.log(data.type2);
+	// 	if (data.type2 == "player_move")
+	// 	{
+	// 		this.nextTurn()
+	// 		if (this.vs_ai == false)
+	// 		{
+	// 			this.remove_suggestions();
+	// 		}
+	// 		for (let index = (19 * 19) - 1; index > 0; index--)
+	// 		{
+	// 			var {i, j} = from_reverse_nb_to_2d(index);
+	// 			if (data.illegal_board[index] == "1")
+	// 			{
+	// 				this.place_illegal(i, j);
+	// 			}
+	// 			else if (data.white_board[index] == "0" && data.black_board[index] == "0")
+	// 			{
+	// 				this.place_void(i, j);
+	// 			}
+	// 		}
+	// 		this.temporary_illegals(false);
+	// 	}
+	// 	else if (data.type2 == "AI_move")
+	// 	{
+	// 		this.nextTurn()
+	// 		for (let index = (19 * 19) - 1; index > 0; index--)
+	// 		{
+	// 			var {i, j} = from_reverse_nb_to_2d(index);
+	// 			if (data.black_board[index] == "1" && data.white_board[index] == "0")
+	// 			{
+	// 				this.place_stone(i, j, 'black');
+	// 			}
+	// 			else if (data.white_board[index] == "1" && data.black_board[index] == "0")
+	// 			{
+	// 				this.place_stone(i, j, "white");
+	// 			}
+	// 			else if (data.white_board[index] == "0" && data.black_board[index] == "0")
+	// 			{
+	// 				this.place_void(i, j);
+	// 			}
+	// 		}
+	// 		console.log("Type: " + data.type2);
+	// 		this.update_time(data.thinking_time);
+	// 		this.temporary_illegals(false);
 
-			// console.log(data.black_board)
-		}
+	// 		// console.log(data.black_board)
+	// 	}
 
-		if (data.winner == "black" || data.winner == "white")
-		{
-			this.update_winner(data.winner);
-			this.remove_clicks();
-		}
-		if (data.type2 == "AI_move_suggestion")
-		{
-			console.log("TURN = " + this.turn);
-			var {i, j} = from_nb_to_2d(data.suggested_move);
-			this.place_suggestion(i, j, this.turn);
-			this.update_time(data.thinking_time);
+	// 	if (data.winner == "black" || data.winner == "white")
+	// 	{
+	// 		this.update_winner(data.winner);
+	// 		this.remove_clicks();
+	// 	}
+	// 	if (data.type2 == "AI_move_suggestion")
+	// 	{
+	// 		console.log("TURN = " + this.turn);
+	// 		var {i, j} = from_nb_to_2d(data.suggested_move);
+	// 		this.place_suggestion(i, j, this.turn);
+	// 		this.update_time(data.thinking_time);
 
 
-		}
-		if (data.b_captures && this.b_captures != data.b_captures)
-		{
-			this.update_captures(data.b_captures, "black");
-		}
-		if (data.w_captures && this.w_captures != data.w_captures)
-		{
-			this.update_captures(data.w_captures, "white");
-		}
-	}
+	// 	}
+	// 	if (data.b_captures && this.b_captures != data.b_captures)
+	// 	{
+	// 		this.update_captures(data.b_captures, "black");
+	// 	}
+	// 	if (data.w_captures && this.w_captures != data.w_captures)
+	// 	{
+	// 		this.update_captures(data.w_captures, "white");
+	// 	}
+	// }
 
 	restart() {
 		
