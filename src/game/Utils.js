@@ -1,9 +1,6 @@
 export function from_2d_to_nb(i, j)
 {
-	console.log("i = ", i, "  j = ", j);
-
 	let nb = (Number(i) * 19) + Number(j);
-	console.log(nb);
 	return nb;
 }
 

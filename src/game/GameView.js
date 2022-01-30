@@ -14,7 +14,11 @@ class Infos {
 
 	update_turn_text(turn){
 		this.turn_text = this.turn + "s' turn";
-		if (turn == "black" && this.player1 != turn)
+		if (turn == null)
+		{
+			this.turn_text = "Waiting for suggestion...";
+		}
+		else if (turn == "black" && this.player1 != turn)
 		{
 			this.turn_text = this.player1 + "'s turn";
 		}
@@ -95,6 +99,11 @@ class Infos {
 		}
 	}
 
+	update_time(time) {
+		var real_time = Number(time) / 1e6;
+		document.querySelector(".time_text").textContent = (Math.round(real_time * 100) / 100) + ' s';
+	}
+
 	
 }
 
@@ -116,8 +125,7 @@ class Board {
 		intersection.style.gridColumnStart = (column - 1) ;
 		intersection.style.gridColumnEnd = (column - 1) + 2;
 
-		intersection.classList.add("intersection");
-		intersection.classList.add("void");
+		intersection.classList.add("intersection", "void");
 
 		intersection.setAttribute("row", row - 2);
 		intersection.setAttribute("col", column - 2);
@@ -138,20 +146,11 @@ class Board {
 	place_stone(row, column, mark)
 	{
 	  const stone = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
-	
-		if (!stone)
+		if (stone)
 		{
-			console.log("ERROR when placing stone in " + row + "x" + column + "! THIS SHOULD NOT PRINT");
-			return;
-			
+			stone.classList.add("stone", mark);
+			stone.classList.remove("void", "off", "suggested_stone");
 		}
-		stone.classList.remove("void");
-		stone.classList.remove("off");
-		stone.classList.remove("suggested_stone");
-		stone.classList.add("stone");
-		stone.classList.add(mark);
-
-		this.html_board.appendChild(stone);
 	};
 
 	temporary_illegals(on)
@@ -188,7 +187,6 @@ class Board {
 		{
 			illegal.classList.remove("void");
 			illegal.classList.add("illegal");
-			this.html_board.appendChild(illegal);
 		}
 	}
 
@@ -196,11 +194,15 @@ class Board {
 	place_void(row, column)
 	{
 		const void_intersection = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
+		let replace_off = false;
 		if (void_intersection && !void_intersection.classList.contains("void"))
 		{
+			if (void_intersection.classList.contains("suggested_stone"))
+			{replace_off = true};
 			void_intersection.classList.remove(...void_intersection.classList);
-			void_intersection.classList.add("intersection");
-			void_intersection.classList.add("void");
+			void_intersection.classList.add("intersection", "void");
+			if (replace_off == true)
+			{void_intersection.classList.add("off")};
 		}
 	}
 	
@@ -223,7 +225,6 @@ class Board {
 
 	update_all(data, turn)
 	{
-		console.log("UPDATING ALL");
 		for (let index = (19 * 19) - 1; index > 0; index--)
 		{
 			var {i, j} = from_reverse_nb_to_2d(index);
@@ -242,12 +243,33 @@ class Board {
 		}
 	}
 
+	place_suggestion(row, column, mark)
+	{
+		const suggested_stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
+
+		if (suggested_stone)
+		{
+			suggested_stone.classList.remove("void");
+			suggested_stone.classList.add("suggested_stone");
+		}
+	}
+
+	remove_suggestions()
+	{
+		document.querySelectorAll(".intersection .suggested_stone").forEach(
+			suggestion => {
+				suggestion.classList.remove("suggested_stone");
+				suggestion.classList.add("void");
+				suggestion.classList.add("off");
+			}
+		);
+	}
+
 }
 
 export default class GameView {
 	constructor(form) {
 		this.vs_ai = JSON.parse(form.data).cpu;
-		console.log("AIIII: ", this.vs_ai);
 		this.player1 = form.player1;
 		this.player2 = form.player2;
 		this.onInterClick = undefined;
@@ -284,20 +306,23 @@ export default class GameView {
 	update(data) {
 		if (data.type2 == "player_move")
 		{
-			console.log("PLAYER MOOOOVE");
-			this.board.update_illegals_and_captures(data, this.infos.turn);
-			this.infos.update_captures(data);
-			this.infos.nextTurn();
 			if (this.vs_ai == false)
 			{
-				this.board.temporary_illegals(false);
+				this.board.remove_suggestions();
 			}
-			
-			console.log("player_move");
+			this.board.update_illegals_and_captures(data, this.infos.turn);
+			this.infos.update_captures(data);
+			if(this.vs_ai == true)
+			{
+				this.infos.nextTurn();
+			}
+			else if (this.vs_ai == false)
+			{
+				this.infos.update_turn_text(null);
+			}
 		}
 		else if (data.type2 == "AI_move" || data.type2 == "AI_move_suggestion")
 		{
-			console.log("AI MOOOOVE");
 			if (data.type2 == "AI_move")
 			{
 				this.board.update_all(data, this.infos.turn);
@@ -307,9 +332,12 @@ export default class GameView {
 			}
 			else if (data.type2 == "AI_move_suggestion")
 			{
-				console.log(data.type2);
-
-			}			
+				this.board.temporary_illegals(false);
+				var {i, j} = from_nb_to_2d(data.suggested_move);
+				this.board.place_suggestion(i, j, this.infos.turn);
+				this.infos.nextTurn();
+			}
+			this.infos.update_time(data.thinking_time);
 		}
 
 	}
@@ -322,27 +350,9 @@ export default class GameView {
 
 
 	
-	place_suggestion(row, column, mark)
-	{
-		const suggested_stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
+	
 
-		if (suggested_stone)
-		{
-			suggested_stone.classList.remove("void");
-			suggested_stone.classList.add("suggested_stone");
-			this.html_board.appendChild(suggested_stone);
-		}
-	}
-
-	remove_suggestions()
-	{
-		document.querySelectorAll(".intersection,.suggested_stone").forEach(
-			suggestion => {
-				suggestion.classList.remove("suggested_stone");
-				suggestion.classList.add("void");
-			}
-		);
-	}
+	
 
 	update_winner(winner)
 	{
@@ -373,10 +383,7 @@ export default class GameView {
 			});
 	}
 
-	update_time(time) {
-		var real_time = Number(time) / 1e6;
-		document.querySelector(".time_text").textContent = (Math.round(real_time * 100) / 100) + ' s';
-	}
+	
 
 
 

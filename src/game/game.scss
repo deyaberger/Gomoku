@@ -95,7 +95,7 @@ body {
 
 .off {
   pointer-events: none;
-  background-color: red;
+  background-color: blue;
 }
 
 .illegal {
@@ -117,6 +117,7 @@ body {
   width: calc(100% / 2);
   height: calc(100% / 2);
   cursor: pointer;
+  pointer-events: unset;
 }
 
 .black {
