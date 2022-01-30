@@ -4,13 +4,11 @@ class Infos {
 	constructor(player1, player2) {
 
 		this.turn = "black";
-		console.log ("PLAYER 1  = ", player1, "  PLAYER 2 = ", player2);
 		this.player1 = player1;
 		this.player2 = player2;
 		this.update_turn_text(this.turn);
 		this.b_captures = 0;
 		this.w_captures = 0;
-
 	}
 
 	update_turn_text(turn){
@@ -127,6 +125,48 @@ class Infos {
 		  'margin-left': '10px',
 		  });
 	};
+
+	reset_captures() {
+		$('.column').css({
+			height: '0%',
+			background: '#90a4ae',
+		});
+		$('.num').css({
+			'padding-top': '185px',
+		});
+		document.querySelectorAll(".num").forEach( number => {
+			number.textContent = '0';
+		});
+	}
+
+	reset_turn()
+	{
+		this.turn = 'black';
+		this.update_turn_text(this.turn);
+		this.update_turn_stone(this.turn);
+	}
+
+	reset_time()
+	{
+		document.querySelector(".time_text").textContent = 'None yet';
+	}
+
+	reset_status()
+	{
+		$('.header__turn').css({
+			'display': 'flex',
+			});
+
+		$('.header__status > .forever_stone').css({
+			'display': 'none',
+			});
+		
+		$('.status').css({
+			'margin-left': '0px',
+			});
+		
+		document.querySelector("[class = 'status']").textContent = '... In Progress ...';
+	}
 	
 }
 
@@ -380,143 +420,21 @@ export default class GameView {
 
 
 
-
-
-
-
-
-	
-	
-
-	
-
-	
-
-
-
-	
-
-
-
-
-	init_captures() {
-		$('.column').css({
-			height: '0%',
-			background: '#90a4ae',
-		});
-		$('.num').css({
-			'padding-top': '185px',
-		});
-		document.querySelectorAll(".num").forEach( number => {
-			number.textContent = '0';
-		});
-	}
-
-
-	// update(data) {
-	// 	console.log(data.type2);
-	// 	if (data.type2 == "player_move")
-	// 	{
-	// 		this.nextTurn()
-	// 		if (this.vs_ai == false)
-	// 		{
-	// 			this.remove_suggestions();
-	// 		}
-	// 		for (let index = (19 * 19) - 1; index > 0; index--)
-	// 		{
-	// 			var {i, j} = from_reverse_nb_to_2d(index);
-	// 			if (data.illegal_board[index] == "1")
-	// 			{
-	// 				this.place_illegal(i, j);
-	// 			}
-	// 			else if (data.white_board[index] == "0" && data.black_board[index] == "0")
-	// 			{
-	// 				this.place_void(i, j);
-	// 			}
-	// 		}
-	// 		this.temporary_illegals(false);
-	// 	}
-	// 	else if (data.type2 == "AI_move")
-	// 	{
-	// 		this.nextTurn()
-	// 		for (let index = (19 * 19) - 1; index > 0; index--)
-	// 		{
-	// 			var {i, j} = from_reverse_nb_to_2d(index);
-	// 			if (data.black_board[index] == "1" && data.white_board[index] == "0")
-	// 			{
-	// 				this.place_stone(i, j, 'black');
-	// 			}
-	// 			else if (data.white_board[index] == "1" && data.black_board[index] == "0")
-	// 			{
-	// 				this.place_stone(i, j, "white");
-	// 			}
-	// 			else if (data.white_board[index] == "0" && data.black_board[index] == "0")
-	// 			{
-	// 				this.place_void(i, j);
-	// 			}
-	// 		}
-	// 		console.log("Type: " + data.type2);
-	// 		this.update_time(data.thinking_time);
-	// 		this.temporary_illegals(false);
-
-	// 		// console.log(data.black_board)
-	// 	}
-
-	// 	if (data.winner == "black" || data.winner == "white")
-	// 	{
-	// 		this.update_winner(data.winner);
-	// 		this.remove_clicks();
-	// 	}
-	// 	if (data.type2 == "AI_move_suggestion")
-	// 	{
-	// 		console.log("TURN = " + this.turn);
-	// 		var {i, j} = from_nb_to_2d(data.suggested_move);
-	// 		this.place_suggestion(i, j, this.turn);
-	// 		this.update_time(data.thinking_time);
-
-
-	// 	}
-	// 	if (data.b_captures && this.b_captures != data.b_captures)
-	// 	{
-	// 		this.update_captures(data.b_captures, "black");
-	// 	}
-	// 	if (data.w_captures && this.w_captures != data.w_captures)
-	// 	{
-	// 		this.update_captures(data.w_captures, "white");
-	// 	}
-	// }
-
 	restart() {
 		
 		var non_void = document.querySelectorAll(".intersection,.stone,.black,.white").forEach(
 			inter => {
 				if (!inter.classList.contains("forever_stone"))
 				{
-					inter.classList.remove("stone");
-					inter.classList.remove("black");
-					inter.classList.remove("white");
-					inter.classList.remove("illegal");
-					inter.classList.remove("suggested_stone");
+					inter.classList.remove("stone", "black", "white", "illegal", "suggested_stone");
 					inter.classList.add("void");
 				}
 			});
-		this.init_captures();
-		this.init_turn();
-		this.update_turn();
-		document.querySelector(".time_text").textContent = 'None yet';
-		$('.header__turn').css({
-			'display': 'flex',
-			});
-
-		$('.header__status > .forever_stone').css({
-			'display': 'none',
-			});
+		this.infos.reset_captures();
+		this.infos.reset_turn();
+		this.infos.reset_time();
+		this.infos.reset_status();
 		
-		$('.status').css({
-			'margin-left': '0px',
-			});
-		
-		document.querySelector("[class = 'status']").textContent = '... In Progress ...';
 
 	}
 }
