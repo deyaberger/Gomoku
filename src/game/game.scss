@@ -95,7 +95,7 @@ body {
 
 .off {
   pointer-events: none;
-  background-color: blue;
+  //   background-color: blue;
 }
 
 .illegal {
@@ -107,8 +107,6 @@ body {
     -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
   width: calc(100% / 2);
   height: calc(100% / 2);
-  //   cursor: unset;
-  //   pointer-events: none;
 }
 
 .suggested_stone {

@@ -4,6 +4,7 @@ class Infos {
 	constructor(player1, player2) {
 
 		this.turn = "black";
+		console.log ("PLAYER 1  = ", player1, "  PLAYER 2 = ", player2);
 		this.player1 = player1;
 		this.player2 = player2;
 		this.update_turn_text(this.turn);
@@ -104,6 +105,28 @@ class Infos {
 		document.querySelector(".time_text").textContent = (Math.round(real_time * 100) / 100) + ' s';
 	}
 
+	update_winner(winner)
+	{
+		var winner_name = winner == "black" ? this.player1 : this.player2;
+
+		$('.header__turn').css({
+			'display': 'none',
+			});
+
+	  document.querySelector("[class = 'status']").textContent = winner_name + ' wins !!!';
+		
+	  var color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
+	  if (winner == 'black')
+		  {color = 'linear-gradient(145deg, #f6cfa6, #000000)';}
+
+	  $('.header__status .forever_stone').css({
+		  background: color,
+		  'display' : 'inline',
+		});
+	  $('.status').css({
+		  'margin-left': '10px',
+		  });
+	};
 	
 }
 
@@ -265,6 +288,14 @@ class Board {
 		);
 	}
 
+	remove_clicks()
+	{
+		document.querySelectorAll(".intersection").forEach(
+			inter => {
+				inter.classList.add("illegal");
+			});
+	}
+
 }
 
 export default class GameView {
@@ -339,6 +370,11 @@ export default class GameView {
 			}
 			this.infos.update_time(data.thinking_time);
 		}
+		if (data.winner == "black" || data.winner == "white")
+		{
+			this.infos.update_winner(data.winner);
+			this.board.remove_clicks();
+		}
 
 	}
 
@@ -354,34 +390,9 @@ export default class GameView {
 
 	
 
-	update_winner(winner)
-	{
-		$('.header__turn').css({
-			'display': 'none',
-			});
+	
 
-	  document.querySelector("[class = 'status']").textContent = winner + ' wins !!!';
-		
-	  var color = 'linear-gradient(145deg, #ffffff, #f6cfa6)';
-	  if (winner == 'black')
-		  {color = 'linear-gradient(145deg, #f6cfa6, #000000)';}
 
-	  $('.header__status .forever_stone').css({
-		  background: color,
-		  'display' : 'inline',
-		});
-	  $('.status').css({
-		  'margin-left': '10px',
-		  });
-	};
-
-	remove_clicks()
-	{
-		document.querySelectorAll(".intersection").forEach(
-			inter => {
-				inter.classList.add("illegal");
-			});
-	}
 
 	
 
