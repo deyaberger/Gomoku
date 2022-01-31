@@ -433,7 +433,7 @@ export default class GameView {
 			inter => {
 				if (!inter.classList.contains("forever_stone"))
 				{
-					inter.classList.remove("stone", "black", "white", "illegal", "suggested_stone");
+					inter.classList.remove("stone", "black", "white", "illegal", "suggested_stone", "off");
 					inter.classList.add("void");
 				}
 			});
