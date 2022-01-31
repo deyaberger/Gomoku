@@ -33,7 +33,6 @@ export default class Ws {
 
    	receive_message(gameview) {
 		this.co.onmessage = (e) => {
-		console.log(e.data);
 		gameview.update(JSON.parse(e.data));
 		}
 	}

@@ -31,7 +31,8 @@ if (easy && medium && hard)
 	hard.addEventListener("click", function () {set_level(form, 7, this)});
 }
 
-document.querySelector(".Medium_button button").click();
+if (medium)
+{medium.click()};
 
 
 // Make sur we can send the form also by clicking on the save button
