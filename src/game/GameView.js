@@ -1,7 +1,7 @@
 import {from_reverse_nb_to_2d, from_nb_to_2d} from "./Utils.js";
 
 class Infos {
-	constructor(player1, player2) {
+	constructor(player1, player2, vs_ai) {
 
 		this.turn = "black";
 		this.player1 = player1;
@@ -9,6 +9,12 @@ class Infos {
 		this.update_turn_text(this.turn);
 		this.b_captures = 0;
 		this.w_captures = 0;
+		if (vs_ai == true)
+		{
+			$(".switch").css({
+				display: "none",
+			});
+		}
 	}
 
 	update_turn_text(turn){
@@ -349,7 +355,7 @@ export default class GameView {
 		this.onSliderClick = undefined;
 
 		this.board = new Board();
-		this.infos = new Infos(this.player1, this.player2);
+		this.infos = new Infos(this.player1, this.player2, this.vs_ai);
 
 		document.querySelectorAll(".intersection").forEach(
 			inter => {
@@ -378,7 +384,6 @@ export default class GameView {
             }
         });
 
-		
 	}
 
 
