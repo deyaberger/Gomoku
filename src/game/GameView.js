@@ -227,7 +227,6 @@ class Board {
 					void_on.classList.add("off");
 				});
 			}
-			
 		}
 		else if (on == false)
 		{
@@ -244,11 +243,11 @@ class Board {
 
 	place_illegal(row, column)
 	{
-		const illegal = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
+		const illegal = document.querySelector("[row = '" + row + "'][col = '" + column + "']");
 
 		if (illegal)
 		{
-			illegal.classList.remove("void");
+			illegal.classList.remove("void", "suggested_stone");
 			illegal.classList.add("illegal");
 		}
 	}

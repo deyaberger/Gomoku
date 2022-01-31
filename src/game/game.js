@@ -24,23 +24,25 @@ gameview.onRestartClick = function() {
 	ws.restart(gameview);
 }
 
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+var caption = document.getElementById("caption");
+
+
 gameview.onAboutClick = function() {
-
-	var modal = document.getElementById("myModal");
-
-	// Get the image and insert it inside the modal - use its "alt" text as a caption
 	var modalImg = document.getElementById("img01");
-	var captionText = document.getElementById("caption");
-	  modal.style.display = "block";
-	  modalImg.src = "img/test2.pdf#toolbar=0&zoom=120";
-
-	
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-	
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() { 
-	  modal.style.display = "none";
-	}
+	modal.style.display = "block";
+	  modalImg.src = "img/about_game.pdf#toolbar=0&zoom=120";
 }
 
+span.onclick = function() { 
+	var modalImg = document.getElementById("img01");
+	modal.style.display = "none";
+	modalImg.remove();
+	modalImg = document.createElement("embed");
+	modalImg.setAttribute('class', "modal-content");
+	modalImg.setAttribute('id', "img01");
+	modalImg.setAttribute('height', "100%");
+	modalImg.setAttribute('frameBorder', "0");
+	modal.insertBefore(modalImg, caption);
+}
