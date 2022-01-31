@@ -1,6 +1,5 @@
 setInterval(function(){
 	var captures = Math.floor(Math.random() * 10) + 1;
-	console.log(captures)
 	var color = 'blue';
 	var pixels = 0;
 
@@ -29,8 +28,6 @@ setInterval(function(){
 		pixels = 185;
 	}
 
-	console.log("color", color);
-	
 	$('.column').css({background: color});
 	
 	$('.column').animate({

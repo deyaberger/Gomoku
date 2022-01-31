@@ -1,14 +1,11 @@
 import "./accueil.scss";
 import Ws from "./Communicate.js";
 
-console.log("index");
-
 var ws = new Ws();
 ws.new_connection();
 
 
 ws.onOpen = function() {
-	console.log("Opened");
 	document.querySelectorAll(".btn").forEach(
 		button => {
 			button.classList.remove("off");
@@ -49,14 +46,12 @@ ws.onError = function() {
 		
 		$('.rab').click(function(){
 		  alert("If you think about anything, you are actually doing a recursive function which resolves your neurons into a deep pi calculation. You are then executing about 4294 threads in your brain, which do a parallel computation.", function(){
-			console.log("Callback executed");
 		  })
 		});
 		
 		// our custom alert box
 		setTimeout(function(){
 		  alert('Hi sweetheart, you are probably reading this alert box and have no clue why the heck you are even reading it, well guess what, the moon is actually just a big rock and we are all going to be sucked up by a black hole at some point. But maybe start the f**king server and refresh the page', function(){
-			  console.log("Callback executed");
 			});
 		}, 500);
 	  });
