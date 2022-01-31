@@ -9,7 +9,6 @@ let ws = new Ws();
 
 let gameview = new GameView(form);
 
-
 ws.new_connection(gameview);
 ws.onOpen = function() {
 	ws.co.send(form.data);
