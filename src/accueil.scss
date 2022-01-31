@@ -1,9 +1,14 @@
+@font-face {
+  font-family: "Open-sans dd";
+  src: url("../img/OpenSans.ttf");
+}
+
 body {
   background: #74adb4;
 }
 
 h1 {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", "Open-sans dd", sans-serif;
   text-align: center;
   color: #dbe6e6;
 }
@@ -30,7 +35,7 @@ img {
 }
 
 .btn {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", "Open-sans dd", sans-serif;
   position: absolute;
   top: 30%;
   left: 50%;
@@ -89,7 +94,7 @@ img {
   }
 
   .message {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Open Sans", "Open-sans dd", sans-serif;
     font-size: 16px;
     letter-spacing: 2px;
     padding: 5px;
