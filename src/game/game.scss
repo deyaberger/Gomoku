@@ -95,7 +95,7 @@ body {
 
 .off {
   pointer-events: none;
-  background-color: red;
+  //   background-color: blue;
 }
 
 .illegal {
@@ -107,8 +107,6 @@ body {
     -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
   width: calc(100% / 2);
   height: calc(100% / 2);
-  //   cursor: unset;
-  //   pointer-events: none;
 }
 
 .suggested_stone {
@@ -116,7 +114,12 @@ body {
     -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
   width: calc(100% / 2);
   height: calc(100% / 2);
+  animation: pulse 0.5s infinite;
+  background-clip: border-box;
+  animation-direction: alternate;
+  background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
   cursor: pointer;
+  pointer-events: unset;
 }
 
 .black {
@@ -125,13 +128,6 @@ body {
 
 .white {
   background: linear-gradient(145deg, #ffffff, #f6cfa6);
-}
-
-.suggested_stone {
-  animation: pulse 0.5s infinite;
-  background-clip: border-box;
-  animation-direction: alternate;
-  background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
 }
 
 .forever_stone {
@@ -282,4 +278,179 @@ button:hover {
 
 .time_text {
   color: blue;
+}
+
+#myImg {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#myImg:hover {
+  opacity: 0.7;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 80px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 100%;
+  max-width: 960px;
+}
+
+/* Caption of Modal Image */
+#caption {
+  margin: auto;
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+/* Add Animation */
+.modal-content,
+#caption {
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px) {
+  .modal-content {
+    width: 100%;
+  }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.switch_text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.945);
+  width: 220%;
+  text-align: center;
+  font-size: 10px;
+  top: -40px;
+  left: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.switch:hover {
+  .switch_text {
+    visibility: visible;
+  }
+}
+
+input:checked + .slider {
+  background-color: rgba(255, 0, 0, 0.397);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px rgba(255, 0, 0, 0.397);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+html {
+  display: unset;
+  visibility: visible;
+  opacity: 1;
 }

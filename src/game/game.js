@@ -24,6 +24,30 @@ gameview.onRestartClick = function() {
 	ws.restart(gameview);
 }
 
-// gameview.onRestartClick = function() {
-// }
+gameview.onSliderClick = function() {
+	gameview.suggestions_off = document.querySelector("input").checked;
+}
 
+
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+var caption = document.getElementById("caption");
+
+
+gameview.onAboutClick = function() {
+	var modalImg = document.getElementById("img01");
+	modal.style.display = "block";
+	  modalImg.src = "img/about_game.pdf#toolbar=0&zoom=120";
+}
+
+span.onclick = function() { 
+	var modalImg = document.getElementById("img01");
+	modal.style.display = "none";
+	modalImg.remove();
+	modalImg = document.createElement("embed");
+	modalImg.setAttribute('class', "modal-content");
+	modalImg.setAttribute('id', "img01");
+	modalImg.setAttribute('height', "100%");
+	modalImg.setAttribute('frameBorder', "0");
+	modal.insertBefore(modalImg, caption);
+}

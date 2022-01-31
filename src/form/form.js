@@ -6,18 +6,33 @@ export default class Form {
 		this.cpu = true;
 		this.player1 = "black";
 		this.player2 = "white";
+		this.depth = 5;
 	}
 
 	update_starting_data() {
 		this.data = JSON.stringify({
 			"type"	: "start",
 			"cpu"	: this.cpu,
-			"depth"	: 7
+			"depth"	: this.depth
 		});
 }
 }
 
 let form = new Form();
+
+
+let easy = document.querySelector(".Easy_button button")
+let medium = document.querySelector(".Medium_button button")
+let hard = document.querySelector(".Hard_button button")
+if (easy && medium && hard)
+{
+	easy.addEventListener("click", function () {set_level(form, 3, this)});
+	medium.addEventListener("click", function () {set_level(form, 5, this)});
+	hard.addEventListener("click", function () {set_level(form, 7, this)});
+}
+
+document.querySelector(".Medium_button button").click();
+
 
 // Make sur we can send the form also by clicking on the save button
 var click_start = document.getElementsByTagName("a")[0];
@@ -45,6 +60,17 @@ player2.addEventListener("keypress", function(event) {
 	click_start.click();
   }
 });
+}
+
+
+function set_level(form, level, element) {
+	form.depth = level;
+	$("button").css({
+		"border-style": "outset",
+	});
+	$(element).css({
+		"border-style": "inset",
+	})
 }
 
 // When button or Enter has been pressed, we keep in session storage all the inputs

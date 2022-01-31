@@ -7,10 +7,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+	<style>html{display:none}</style>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=PT+Sans&family=Source+Code+Pro:wght@200&family=Titillium+Web:wght@200&display=swap');
 	</style>
+	<script type="text/javascript">
+		$('html').addClass('hidden');
+		$(document).ready(function() {    
+		  $('html').show();  
+		 });  
+	   </script>
 </head>
 
 <body>
@@ -24,6 +30,11 @@
 				<div class = 'forever_stone'></div>
 				<div class = 'status'>... In Progress ...</div>
 			</div>
+			<label class="switch">
+				<input type="checkbox" checked>
+				<span class="slider"></span>
+				<span class="switch_text">Turn on/off AI suggestions</span>
+			</label>
 			<button type = "button" class = "header__about">
 				<i class="material-icons">about</i>
 			</button>
@@ -72,6 +83,11 @@
 				</div>
 			</div>
 		</div>
+		<div id="myModal" class="modal">
+			<span class="close">&times;</span>
+			<embed class="modal-content" id="img01" height = "100%" frameBorder="0"></embed>
+			<div id="caption"></div>
+		  </div>
 	</div>
 </body>
 </html>
