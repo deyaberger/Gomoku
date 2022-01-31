@@ -168,3 +168,9 @@ body {
     bottom: 100%;
   }
 }
+
+html {
+  display: unset;
+  visibility: visible;
+  opacity: 1;
+}
