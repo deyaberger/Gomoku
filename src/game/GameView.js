@@ -340,11 +340,13 @@ class Board {
 export default class GameView {
 	constructor(form) {
 		this.vs_ai = JSON.parse(form.data).cpu;
+		this.suggestions_off = false;
 		this.player1 = form.player1;
 		this.player2 = form.player2;
 		this.onInterClick = undefined;
 		this.onRestartClick = undefined;
 		this.onAboutClick = undefined;
+		this.onSliderClick = undefined;
 
 		this.board = new Board();
 		this.infos = new Infos(this.player1, this.player2);
@@ -367,6 +369,12 @@ export default class GameView {
 		document.querySelector(".header__about").addEventListener("click", () => {
             if (this.onAboutClick) {
                 this.onAboutClick();
+            }
+        });
+
+		document.querySelector(".slider").addEventListener("click", () => {
+			if (this.onSliderClick) {
+                this.onSliderClick();
             }
         });
 

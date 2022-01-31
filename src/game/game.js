@@ -9,6 +9,7 @@ let ws = new Ws();
 
 let gameview = new GameView(form);
 
+
 ws.new_connection(gameview);
 ws.onOpen = function() {
 	ws.co.send(form.data);
@@ -23,6 +24,11 @@ gameview.onRestartClick = function() {
 	gameview.restart();
 	ws.restart(gameview);
 }
+
+gameview.onSliderClick = function() {
+	gameview.suggestions_off = document.querySelector("input").checked;
+}
+
 
 var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
