@@ -114,6 +114,10 @@ body {
     -2px -2px 4px 0 rgba(255, 255, 255, 0.25);
   width: calc(100% / 2);
   height: calc(100% / 2);
+  animation: pulse 0.5s infinite;
+  background-clip: border-box;
+  animation-direction: alternate;
+  background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
   cursor: pointer;
   pointer-events: unset;
 }
@@ -124,13 +128,6 @@ body {
 
 .white {
   background: linear-gradient(145deg, #ffffff, #f6cfa6);
-}
-
-.suggested_stone {
-  animation: pulse 0.5s infinite;
-  background-clip: border-box;
-  animation-direction: alternate;
-  background: linear-gradient(145deg, #f6cfa6, rgba(255, 0, 0, 0.397));
 }
 
 .forever_stone {
@@ -298,7 +295,7 @@ button:hover {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 80px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -312,15 +309,15 @@ button:hover {
 .modal-content {
   margin: auto;
   display: block;
-  width: 80%;
-  max-width: 700px;
+  width: 100%;
+  max-width: 960px;
 }
 
 /* Caption of Modal Image */
 #caption {
   margin: auto;
   display: block;
-  width: 80%;
+  width: 100%;
   max-width: 700px;
   text-align: center;
   color: #ccc;

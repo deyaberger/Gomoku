@@ -32,7 +32,8 @@ gameview.onAboutClick = function() {
 	var modalImg = document.getElementById("img01");
 	var captionText = document.getElementById("caption");
 	  modal.style.display = "block";
-	  modalImg.src = "img/test.png";
+	  modalImg.src = "img/test2.pdf#toolbar=0&zoom=120";
+
 	
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
