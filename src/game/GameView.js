@@ -394,6 +394,7 @@ export default class GameView {
 
 
 	update(data) {
+		console.log(data);
 		if (data.type2 == "player_move")
 		{
 			if (this.vs_ai == false)
