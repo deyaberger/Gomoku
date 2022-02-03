@@ -29,7 +29,7 @@ body {
 }
 
 
-.total_turns{
+.total_moves{
 	display: flex;
 	width: 810px;
 	height: 144px;
@@ -45,14 +45,14 @@ body {
 	z-index: 0;
 }
 
-.total_turns > p {
+.total_moves > p {
 	margin-left: 20px;
 	border: solid;
 	font-size: 10px;
 	border-width: thin;
 	border-color: black;
 	padding: 5px;
-	// display: none;
+	white-space: pre;
 }
 
 .header__turn {

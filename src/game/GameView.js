@@ -9,11 +9,31 @@ class Infos {
 		this.update_turn_text(this.turn);
 		this.b_captures = 0;
 		this.w_captures = 0;
+		this.moves = 0;
 		if (vs_ai == true)
 		{
 			$(".switch").css({
 				display: "none",
 			});
+		}
+	}
+
+	update_moves_count()
+	{
+		if (this.turn == "black")
+		{
+			this.moves += 1;
+		}
+		var text = this.moves + "\nmoves";
+		if (this.moves == 1)
+		{
+			text = this.moves + "\nmove";
+		}
+		var total_moves = document.querySelector(".total_moves > p");
+		if (total_moves) {
+			
+			total_moves.textContent = text;
+			total_moves.innerHTML.replace(/\n\r?/g, '<br />');
 		}
 	}
 
@@ -389,6 +409,7 @@ export default class GameView {
 
 	makeMove(i, j) {
 		this.board.place_stone(i, j, this.infos.turn);
+		this.infos.update_moves_count();
 		this.board.temporary_illegals(true);
 	}
 
