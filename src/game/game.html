@@ -20,7 +20,14 @@
 <body>
 	<div id = "app">
 		<div class = "header">
-		<div class = "total_moves"><p>0</br>moves</p></div>
+		<div class = "total_moves">
+			<p>0</br>moves</p>
+			<label class="switch">
+				<input type="checkbox" checked>
+				<span class="slider"></span>
+				<span class="switch_text">Turn on/off AI suggestions</span>
+			</label>
+		</div>
 			<div class = "header__turn">
 				<div class = 'forever_stone'></div>
 				<div class = 'turn'>Blacks' turn</div>
@@ -29,11 +36,7 @@
 				<div class = 'forever_stone'></div>
 				<div class = 'status'>... In Progress ...</div>
 			</div>
-			<label class="switch">
-				<input type="checkbox" checked>
-				<span class="slider"></span>
-				<span class="switch_text">Turn on/off AI suggestions</span>
-			</label>
+			
 			<button type = "button" class = "header__about">
 				<i class="material-icons">about</i>
 			</button>

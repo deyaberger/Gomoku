@@ -153,7 +153,7 @@ class Infos {
 	};
 
 	reset_captures() {
-		$('.column').css({
+		$('.column-wrapper .column').css({
 			height: '0%',
 			background: '#90a4ae',
 		});
@@ -163,6 +163,23 @@ class Infos {
 		document.querySelectorAll(".num").forEach( number => {
 			number.textContent = '0';
 		});
+		
+	}
+
+	reset_moves() {
+		var total_moves = document.querySelector(".total_moves > p");
+		if (total_moves) {
+			
+			total_moves.textContent = "0\nmoves";
+			total_moves.innerHTML.replace(/\n\r?/g, '<br />');
+		}
+	}
+
+	reset_score() {
+		$('.score .column').css({
+			height: '50%',
+		});
+
 	}
 
 	reset_turn()
@@ -193,6 +210,41 @@ class Infos {
 		
 		document.querySelector("[class = 'status']").textContent = '... In Progress ...';
 	}
+
+	update_score(score)
+	{
+		var height = "50%"
+		if (score < 0)
+		{
+			height = "75%"
+		}
+		else if (score > 0)
+		{
+			height = "25%"
+		}
+		$(".score > .column").animate({
+			"height": height,
+	  })
+	}
+
+	on_off_suggestions(off)
+	{
+		// TO BE IMPROVED
+		if (off == true)
+		{
+			$(".suggested_stone").css({
+				display: "none"
+			})
+		}
+		else if (off == false)
+		{
+			$(".suggested_stone").css({
+				display: "unset"
+			})
+		}
+	}
+
+
 	
 }
 
@@ -424,6 +476,7 @@ export default class GameView {
 			}
 			this.board.update_illegals_and_captures(data, this.infos.turn);
 			this.infos.update_captures(data);
+			this.infos.update_score(data.score);
 			if(this.vs_ai == true)
 			{
 				this.infos.nextTurn();
@@ -475,7 +528,7 @@ export default class GameView {
 		this.infos.reset_turn();
 		this.infos.reset_time();
 		this.infos.reset_status();
-		
-
+		this.infos.reset_score();
+		this.infos.reset_moves();
 	}
 }

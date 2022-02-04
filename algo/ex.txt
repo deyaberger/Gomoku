@@ -1,0 +1,11 @@
+{
+	"type"	: "start",
+	"cpu"	: true,
+	"depth" : 7
+}
+
+{
+	"type"	: "move",
+	"move" 	: 12
+}
+

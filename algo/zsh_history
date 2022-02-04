@@ -1,0 +1,49 @@
+: 1642432874:0;ls
+: 1642432874:0;lol
+: 1642432874:0;cxaca
+: 1642432874:0;lolo
+: 1642432874:0;echo $SHELL
+: 1642432874:0;ls
+: 1642430834:0;cd build
+: 1642430837:0;rm -rf *
+: 1642430842:0;cmake ..
+: 1642430850:0;g++-10
+: 1642430859:0;apt install g++-10
+: 1642430927:0;add-apt-repository ppa:ubuntu-toolchain-r/test
+: 1642430937:0;apt install add-apt-repository
+: 1642430993:0;apt install build-essantials
+: 1642430997:0;apt install build-essantial
+: 1642431268:0;ls
+: 1642431270:0;g++
+: 1642431275:0;g++ --version
+: 1642431280:0;g++10 --version
+: 1642431283:0;g++-10 --version
+: 1642431289:0;apt update
+: 1642431305:0;apt instll vim
+: 1642431308:0;apt install vim
+: 1642431316:0;apt install net-tools
+: 1642431326:0;apt install g++-10
+: 1642431410:0;sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+: 1642431413:0;add-apt-repository ppa:ubuntu-toolchain-r/test
+: 1642431451:0;apt-get install software-properties-common
+: 1642431466:0;add-apt-repository ppa:ubuntu-toolchain-r/test
+: 1642431476:0;add-apt-repository -y ppa:ubuntu-toolchain-r/test
+: 1642431498:0;apt install g++-10
+: 1642431602:0;ls
+: 1642431603:0;cmake
+: 1642431606:0;g++-10
+: 1642431609:0;l
+: 1642431611:0;ls
+: 1642431613:0;cd build
+: 1642431614:0;ls
+: 1642431622:0;rm -rf *
+: 1642431625:0;ls
+: 1642431643:0;cmake ..
+: 1642431652:0;cmake --build .
+: 1642431664:0;./Gomook
+: 1642432480:0;ls
+: 1642432485:0;cd build
+: 1642432486:0;ls
+: 1642432487:0;./Gomook
+: 1642432830:0;cd build
+: 1642432832:0;./Gomook
