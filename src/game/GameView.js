@@ -10,6 +10,7 @@ class Infos {
 		this.b_captures = 0;
 		this.w_captures = 0;
 		this.moves = 0;
+		this.stop_suggest = false;
 		if (vs_ai == true)
 		{
 			$(".switch").css({
@@ -227,21 +228,27 @@ class Infos {
 	  })
 	}
 
-	on_off_suggestions(off)
+	on_off_suggestions(off, board)
 	{
 		// TO BE IMPROVED
+		console.log("THIS: ", this.stop_suggest)
+		console.log("off: ", off)
 		if (off == true)
 		{
-			$(".suggested_stone").css({
-				display: "none"
-			})
+			let suggested_stone = document.querySelector(".suggested_stone");
+			if (suggested_stone)
+			{
+				suggested_stone.classList.remove("suggested_stone")	
+				suggested_stone.classList.add("void")	
+			}
+
 		}
 		else if (off == false)
 		{
-			$(".suggested_stone").css({
-				display: "unset"
-			})
+			board.place_suggestion(this.last_suggestion[0], this.last_suggestion[1]);
+			this.stop_suggest = true;
 		}
+		console.log(" AFTER: ", this.stop_suggest)
 	}
 
 
@@ -383,7 +390,7 @@ class Board {
 		}
 	}
 
-	place_suggestion(row, column, mark)
+	place_suggestion(row, column)
 	{
 		const suggested_stone = document.querySelector("[class = 'intersection void'][row = '" + row + "'][col = '" + column + "']");
 
@@ -499,7 +506,12 @@ export default class GameView {
 			{
 				this.board.temporary_illegals(false);
 				var {i, j} = from_nb_to_2d(data.suggested_move);
-				this.board.place_suggestion(i, j, this.infos.turn);
+				this.infos.last_suggestion = [i, j];
+				if (this.infos.stop_suggest == false)
+				{
+					console.log(this.infos.stop_suggest);
+					this.board.place_suggestion(i, j);
+				}
 				this.infos.nextTurn();
 			}
 			this.infos.update_time(data.thinking_time);

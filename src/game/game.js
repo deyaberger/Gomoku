@@ -26,7 +26,7 @@ gameview.onRestartClick = function() {
 
 gameview.onSliderClick = function() {
 	gameview.suggestions_off = document.querySelector("input").checked;
-	gameview.infos.on_off_suggestions(gameview.suggestions_off);
+	gameview.infos.on_off_suggestions(gameview.suggestions_off, gameview.board);
 }
 
 
