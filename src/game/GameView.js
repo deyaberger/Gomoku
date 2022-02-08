@@ -43,6 +43,10 @@ class Infos {
 		if (turn == null)
 		{
 			this.turn_text = "Waiting for suggestion...";
+			if (this.stop_suggest == true)
+			{
+				this.turn_text = "Waiting for server...";
+			}
 		}
 		else if (turn == "black" && this.player1 != turn)
 		{
@@ -214,15 +218,13 @@ class Infos {
 
 	update_score(score)
 	{
-		var height = "50%"
-		if (score < 0)
-		{
-			height = "75%"
-		}
-		else if (score > 0)
-		{
-			height = "25%"
-		}
+		var height = "50%";
+
+		let discretized_score = score == 0 ? 0 : (score / Math.abs(score)) * Math.log(Math.sqrt(Math.abs(score)) + 1);
+		discretized_score = Math.min(Math.max(parseInt(discretized_score), -5), 5);
+		let h = (1 - ((discretized_score + 5) / 10)) * 100;
+		height = h + "%";
+
 		$(".score > .column").animate({
 			"height": height,
 	  })
