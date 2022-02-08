@@ -230,25 +230,22 @@ class Infos {
 
 	on_off_suggestions(off, board)
 	{
-		// TO BE IMPROVED
-		console.log("THIS: ", this.stop_suggest)
-		console.log("off: ", off)
 		if (off == true)
 		{
 			let suggested_stone = document.querySelector(".suggested_stone");
 			if (suggested_stone)
 			{
-				suggested_stone.classList.remove("suggested_stone")	
-				suggested_stone.classList.add("void")	
+				suggested_stone.classList.remove("suggested_stone")	;
+				suggested_stone.classList.add("void");
+				this.stop_suggest = true;
 			}
 
 		}
 		else if (off == false)
 		{
 			board.place_suggestion(this.last_suggestion[0], this.last_suggestion[1]);
-			this.stop_suggest = true;
+			this.stop_suggest = false;
 		}
-		console.log(" AFTER: ", this.stop_suggest)
 	}
 
 
@@ -509,7 +506,6 @@ export default class GameView {
 				this.infos.last_suggestion = [i, j];
 				if (this.infos.stop_suggest == false)
 				{
-					console.log(this.infos.stop_suggest);
 					this.board.place_suggestion(i, j);
 				}
 				this.infos.nextTurn();
