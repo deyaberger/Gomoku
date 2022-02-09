@@ -15,7 +15,21 @@
 <body>
 	<h1>
 		<div class = "title">GOMOKU</div>
-		<div class = "about"><button>about us</button></div>
+		<a class = "about" href = "#popup1"><button>about us</button></a>
+		<div id="popup1" class="overlay">
+			<div class="popup">
+				<h2>Hi this is us, Deya and Joep!</h2>
+				<a class="close" href="#">&times;</a>
+				<div class="content">
+					<img src = "./img/deya.jpg" alt="deya">
+					<img src = "./img/joep.jpg" alt="joep">
+					<p>This is an algorithm project we did for our school 42.</p>
+					<p>Gomoku is a strategy board game traditionally played on a Go board with stones of two different colors.</p>
+					<p>You can play with a friend or against our AI</p>
+					<p>The AI algorithm is based on Max-Min blablabla</p>
+				</div>
+			</div>
+		</div>
 	</h1>
 	<div class="two_options">
 		<div class="computer">
@@ -31,7 +45,6 @@
 		<p class='message'></p>
 		  <input type='button' class='confirmButton' value='Ok'>
 	</div>
-
 
 </body>
 

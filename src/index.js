@@ -20,43 +20,34 @@ ws.onOpen = function() {
 	};
 }
 
-
 ws.onError = function() {
-	window.alert = function(msg, callback){
-		$('.message').text(msg);
-		$('.customAlert').css('animation', 'fadeIn 0.3s linear');
-		$('.customAlert').css('display', 'inline');
-		setTimeout(function(){
-		  $('.customAlert').css('animation', 'none');
-		}, 300);
-		currentCallback = callback;
-	  }
-	  
-	$(function(){
-  
-		// add listener for when our confirmation button is clicked
-		  $('.confirmButton').click(function(){
-		  $('.customAlert').css('animation', 'fadeOut 0.3s linear');
-		  setTimeout(function(){
-		   $('.customAlert').css('animation', 'none');
-			  $('.customAlert').css('display', 'none');
-		  }, 300);
-		  currentCallback();
-		})
-		
-		$('.rab').click(function(){
-		  alert("If you think about anything, you are actually doing a recursive function which resolves your neurons into a deep pi calculation. You are then executing about 4294 threads in your brain, which do a parallel computation.", function(){
-		  })
+	setTimeout(function(){
+		alert('Hi sweetheart, you are probably reading this alert box and have no clue why the heck you are even reading it, well guess what, the moon is actually just a big rock and we are all going to be sucked up by a black hole at some point. But maybe start the f**king server and refresh the page', function(){
 		});
-		
-		// our custom alert box
-		setTimeout(function(){
-		  alert('Hi sweetheart, you are probably reading this alert box and have no clue why the heck you are even reading it, well guess what, the moon is actually just a big rock and we are all going to be sucked up by a black hole at some point. But maybe start the f**king server and refresh the page', function(){
-			});
-		}, 500);
-	  });
-	console.log("error");
+	}, 500);
 }
+
+window.alert = function(msg, callback){
+	$('.message').text(msg);
+	$('.customAlert').css('animation', 'fadeIn 0.3s linear');
+	$('.customAlert').css('display', 'inline');
+	setTimeout(function(){
+	  $('.customAlert').css('animation', 'none');
+	}, 300);
+	currentCallback = callback;
+  }
+
+$('.confirmButton').click(function(){
+	$('.customAlert').css('animation', 'fadeOut 0.3s linear');
+	setTimeout(function(){
+	$('.customAlert').css('animation', 'none');
+		$('.customAlert').css('display', 'none');
+	}, 300);
+	currentCallback();
+	});
+
+
+
 
 
 var currentCallback;

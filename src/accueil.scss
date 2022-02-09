@@ -30,6 +30,7 @@ h1 {
 
 h1,.about {
 	margin-left: auto;
+	margin-right: 1%;
 }
 
 .about > button{
@@ -52,6 +53,84 @@ h1,.about {
 .about > button:hover{
 	background-color: rgba(255, 255, 255, 0.185);
 }
+
+.overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.7);
+	transition: opacity 500ms;
+	visibility: hidden;
+	opacity: 0;
+	z-index: 1;
+  }
+  .overlay:target {
+	visibility: visible;
+	opacity: 1;
+  }
+  
+  .popup {
+	margin: 70px auto;
+	padding: 20px;
+	background: #30484b;
+	border-radius: 5px;
+	width: 50%;
+	position: relative;
+	transition: all 5s ease-in-out;
+  }
+  
+  .popup h2 {
+	margin-top: 0;
+	font-family: "Open Sans", "Open-sans dd", sans-serif;
+	color: #dbe6e6;
+	text-align: center;
+  }
+
+  .popup img {
+	  max-width: 200px;
+	  max-height: 200px;
+	  object-fit: cover;
+	  object-position: 0% 30%;
+	  opacity: 0.8;
+	  border-radius: 50%;
+	  margin-left: 5%;
+	  margin-right: 5%;
+  }
+
+  .popup .close {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	transition: all 200ms;
+	font-size: 30px;
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+  }
+
+  .popup .close:hover {
+	color: #74adb4;
+  }
+
+  .popup .content {
+	font-family: "Open Sans", "Open-sans dd", sans-serif;
+	text-align: center;
+	font-size: 25px;
+	max-height: 30%;
+	overflow: auto;
+	color: #dbe6e6;
+  }
+  
+  @media screen and (max-width: 700px){
+	.box{
+	  width: 70%;
+	}
+	.popup{
+	  width: 70%;
+	}
+  }
 
 .two_options {
 width: 100%;
