@@ -8,11 +8,49 @@ body {
 }
 
 h1 {
-  font-family: "Open Sans", "Open-sans dd", sans-serif;
-  text-align: center;
-  color: #dbe6e6;
-	margin: 5% 0% 5% 0%;
+	display: flex;
+	position: relative;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	justify-items: inline;
+	justify-content: center;
+}
 
+.title {
+	font-family: "Open Sans", "Open-sans dd", sans-serif;
+	margin: 5% 0% 5% 0%;
+	color: #dbe6e6;
+	flex:1;
+	display: flex;
+	justify-content: center;
+	transform: translateX(50px);
+}
+
+h1,.about {
+	margin-left: auto;
+}
+
+.about > button{
+	margin: 0% 0% 0% 0%;
+	font-family: "Open Sans", "Open-sans dd", sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
+    5px 5px 0px 0px;
+	background-color: transparent;
+	cursor: pointer;
+
+}
+
+.about > button:hover{
+	background-color: rgba(255, 255, 255, 0.185);
 }
 
 .two_options {
