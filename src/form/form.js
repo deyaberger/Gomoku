@@ -7,14 +7,15 @@ export default class Form {
 		this.player1 = "black";
 		this.player2 = "white";
 		this.depth = 5;
-		this.kbim = false;
+		this.k_beam = false;
 	}
 
 	update_starting_data() {
 		this.data = JSON.stringify({
 			"type"	: "start",
 			"cpu"	: this.cpu,
-			"depth"	: this.depth
+			"depth"	: this.depth,
+			"k_beam" : this.k_beam
 		});
 }
 }
@@ -25,7 +26,7 @@ let form = new Form();
 let easy = document.querySelector(".Easy_button button")
 let medium = document.querySelector(".Medium_button button")
 let hard = document.querySelector(".Hard_button button")
-let kbim = document.querySelector(".kbim_button button")
+let k_beam = document.querySelector(".k_beam button")
 
 if (easy && medium && hard)
 {
@@ -37,8 +38,8 @@ if (easy && medium && hard)
 if (medium)
 {medium.click()};
 
-if (kbim)
-{kbim.addEventListener("click", function () {activate_kbim(form, this)});}
+if (k_beam)
+{k_beam.addEventListener("click", function () {activate_k_beam(form, this)});}
 
 
 // Make sur we can send the form also by clicking on the save button
@@ -82,23 +83,23 @@ function set_level(form, level, element) {
 	})
 }
 
-function activate_kbim(form, element) {
+function activate_k_beam(form, element) {
 	form.depth += 3;
-	if (form.kbim == false)
+	if (form.k_beam == false)
 	{
 		$(element).css({
 			"border-style": "inset",
 			"color": "#03e9f4",
 		});
-		form.kbim = true;
+		form.k_beam = true;
 	}
-	else if (form.kbim == true)
+	else if (form.k_beam == true)
 	{
 		$(element).css({
 			"border-style": "outset",
 			"color": "#00b6c3"
 		});
-		form.kbim = false;
+		form.k_beam = false;
 	}
 }
 
