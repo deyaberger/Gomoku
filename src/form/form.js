@@ -7,6 +7,7 @@ export default class Form {
 		this.player1 = "black";
 		this.player2 = "white";
 		this.depth = 5;
+		this.kbim = false;
 	}
 
 	update_starting_data() {
@@ -24,6 +25,8 @@ let form = new Form();
 let easy = document.querySelector(".Easy_button button")
 let medium = document.querySelector(".Medium_button button")
 let hard = document.querySelector(".Hard_button button")
+let kbim = document.querySelector(".kbim_button button")
+
 if (easy && medium && hard)
 {
 	easy.addEventListener("click", function () {set_level(form, 3, this)});
@@ -33,6 +36,9 @@ if (easy && medium && hard)
 
 if (medium)
 {medium.click()};
+
+if (kbim)
+{kbim.addEventListener("click", function () {activate_kbim(form, this)});}
 
 
 // Make sur we can send the form also by clicking on the save button
@@ -68,10 +74,32 @@ function set_level(form, level, element) {
 	form.depth = level;
 	$("button").css({
 		"border-style": "outset",
+  		"color": "#00b6c3"
 	});
 	$(element).css({
 		"border-style": "inset",
+		"color": "#03e9f4",
 	})
+}
+
+function activate_kbim(form, element) {
+	form.depth += 3;
+	if (form.kbim == false)
+	{
+		$(element).css({
+			"border-style": "inset",
+			"color": "#03e9f4",
+		});
+		form.kbim = true;
+	}
+	else if (form.kbim == true)
+	{
+		$(element).css({
+			"border-style": "outset",
+			"color": "#00b6c3"
+		});
+		form.kbim = false;
+	}
 }
 
 // When button or Enter has been pressed, we keep in session storage all the inputs

@@ -2,7 +2,6 @@ import "./game.scss";
 import GameView from "./GameView.js";
 import Ws from "../Communicate.js";
 
-console.log("GAME");
 var form = JSON.parse(sessionStorage.getItem("form"));
 
 let ws = new Ws();
