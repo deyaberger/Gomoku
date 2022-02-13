@@ -2,7 +2,7 @@ import "./game.scss";
 import GameView from "./GameView.js";
 import Ws from "../Communicate.js";
 
-
+console.log("GAME");
 var form = JSON.parse(sessionStorage.getItem("form"));
 
 let ws = new Ws();
@@ -38,7 +38,7 @@ var caption = document.getElementById("caption");
 gameview.onAboutClick = function() {
 	var modalImg = document.getElementById("img01");
 	modal.style.display = "block";
-	  modalImg.src = "img/about_game.pdf#toolbar=0&zoom=120";
+	  modalImg.src = "./img/about_gomoku.png";
 }
 
 span.onclick = function() { 
