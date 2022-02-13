@@ -4,7 +4,6 @@ import Ws from "./Communicate.js";
 var ws = new Ws();
 ws.new_connection();
 
-
 ws.onOpen = function() {
 	document.querySelectorAll(".btn").forEach(
 		button => {

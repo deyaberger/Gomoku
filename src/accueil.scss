@@ -74,7 +74,8 @@ h1,.about {
   .popup {
 	margin: 70px auto;
 	padding: 20px;
-	background: #30484b;
+	// background: #30484b;
+	background: #619197;
 	border-radius: 5px;
 	width: 50%;
 	position: relative;
@@ -111,7 +112,7 @@ h1,.about {
   }
 
   .popup .close:hover {
-	color: #74adb4;
+	color: white;
   }
 
   .popup .content {
