@@ -7,18 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Game</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<style>html{display:none}</style>
 	<link rel="shortcut icon" href="img/favicon.ico">
-	<script type="text/javascript">
-		$('html').addClass('hidden');
-		$(document).ready(function() {    
-		  $('html').show();  
-		 });  
-	   </script>
 </head>
 
 <body>
-	<div id = "app">
+	<div id = "app" style="visibility: hidden">
 		<div class = "header">
 		<div class = "total_moves">
 			<p>0</br>moves</p>
@@ -93,7 +86,7 @@
 			<div id="caption"></div>
 		  </div>
 	</div>
-	<div class = "popup" id = "popup">
+	<div class = "popup" id = "popup" style="visibility: hidden">
 	<div class='customAlert'>
 		<p class='message'></p>
 		  <input type='button' class='confirmButton' value='Ok' Id = "ok">
