@@ -1,7 +1,6 @@
 # GOMOKU
 
-### Welcome to our project repository. Gomoku is a strategy board played on a Go board with stones of two different colors. You can play with a friend, or against our AI, but you might never beat it because it is so awesome
-:joy:
+### *Welcome to our project repository. Gomoku is a strategy board played on a Go board with stones of two different colors. You can play with a friend, or against our AI, but you might never beat it because it is so awesome* :smile: </br>
 
 You'll find more details below in this readme, or directly on our webpage: http://gomoku.deyaberger.fr
 
