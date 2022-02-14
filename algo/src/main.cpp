@@ -89,14 +89,14 @@ State play_game(int depth, bool cpu1, bool cpu2, int limit = 10, State s = State
 		std::cout << std::endl;
 
 		std::cout << "Fold: " << folds << std::endl;
-		// s.print();
+		s.print();
 		// s.print_score_board();
 
 		folds += 1;
 		if (folds >= limit and cpu1 and cpu2)
 		{
 			s.print();
-			// s.print_score_board();
+			s.print_score_board();
 			break;
 		}
 	}
@@ -115,8 +115,8 @@ int main()
 
 	// fut2.wait_for(std::chrono::seconds(1));
 
+	// play_game(10, true, true, 40);
 	run_websocket_server("0.0.0.0", 16784);
-	play_game(7, true, true, 40);
 
 	// play_game_beam(7, true, true, 40);
 

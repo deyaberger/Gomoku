@@ -15,7 +15,7 @@
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-#include <boost/asio/ip/tcp.hpp>
+// #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
@@ -85,6 +85,7 @@ static void	add_board_to_json(json &response, State s)
 	illegal_sstr << s.make_illegal_move_board() << std::endl;
 	std::string illegal_str = illegal_sstr.str();
 	response["illegal_board"] = illegal_str;
+	std::cout << "illegal: " << illegal_str << std::endl;
 }
 
 
@@ -203,7 +204,6 @@ std::string		game_handler::play_received_move(json json_msg)
 	add_game_state_to_json(response, this->s);
 	if (!was_anything_captured(this->s, tmp)  && tmp.is_possible_capture())
 	{
-		std::cout << "/* message */" << std::endl;
 		potential_capture_value = (potential_capture_value * 8) / 9;
 	}
 
@@ -225,11 +225,19 @@ std::string		game_handler::AI_move_or_predict(void)
 	{
 		if (this->k_beam)
 		{
-			this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth));
+			#ifdef SINGLE_THREAD
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth));
+			#else
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth));
+			#endif
 		}
 		else
 		{
-			this->s = this->s.make_baby_from_coord(minimax_fred_start_brother(s, this->depth));
+			#ifdef SINGLE_THREAD
+				this->s = this->s.make_baby_from_coord(minimax_single_fred(s, this->depth));
+			#else
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother(s, this->depth + 3));
+			#endif
 		}
 		response["type2"] = "AI_move";
 
@@ -240,13 +248,21 @@ std::string		game_handler::AI_move_or_predict(void)
 	{
 		if (this->k_beam)
 		{
-			response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth);
+			#ifdef SINGLE_THREAD
+				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth);
+			#else
+				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth);
+			#endif
 		}
 		else
 		{
-			response["suggested_move"] = minimax_fred_start_brother(s, this->depth);
+			#ifdef SINGLE_THREAD
+				response["suggested_move"] = minimax_single_fred(s, this->depth);
+			#else
+				response["suggested_move"] = minimax_fred_start_brother(s, this->depth);
+			#endif
 		}
-		response["type2"]			= "AI_move_suggestion";
+		response["type2"] = "AI_move_suggestion";
 
 	}
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

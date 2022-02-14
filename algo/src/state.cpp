@@ -114,6 +114,11 @@ void			State::print(bool print_empty)
 	else
 		std::cout << "Next player: WHITE"  << std::endl;
 
+	std::cout << "W captures: " << this->w_captures << std::endl;
+	std::cout << "B captures: " << this->b_captures << std::endl;
+	std::cout << "Win: " << this->game_win << std::endl;
+	std::cout << "Last chance: " << this->last_chance << std::endl;
+	std::cout << "Winner: " << this->winner << std::endl;
 	std::cout << "Score: " << this->score << std::endl;
 
 	for (int c = 0; c < BOARD_WIDTH; c++)
@@ -573,6 +578,7 @@ bool			State::is_win(void)
 
 	if (this->b_captures == 5 or this->w_captures == 5)
 	{
+		this->last_chance = false;
 		this->game_win	= true;
 		this->winner	= next_player(this->player);
 		return true;
@@ -580,23 +586,20 @@ bool			State::is_win(void)
 
 	if (this->last_chance)
 	{
+		this->last_chance = false;
 		if (count_to_5(last_chance_move / BOARD_WIDTH, last_chance_move % BOARD_WIDTH, this->player))
 		{
 			this->game_win	= true;
 			this->winner	= this->player;
 			return true;
 		}
-		else
-		{
-			this->last_chance = false;
-		}
 	}
 
-	if (count_to_5(row, col, next_player(this->player)))
+	if (!this->game_win && count_to_5(row, col, next_player(this->player)))
 	{
-		this->last_chance		= true;
+		this->last_chance		= this->can_capture_to_avoid_defeat();
 		this->last_chance_move	= this->last_move;
-		this->game_win			= not this->can_capture_to_avoid_defeat();
+		this->game_win			= !this->last_chance;
 
 		if (this->game_win)
 			this->winner		= next_player(this->player);
@@ -630,7 +633,7 @@ bitboard		State::make_illegal_move_board(void)
 }
 
 
-bool		was_anything_captured(const State& s1, const State& s2)
+bool			was_anything_captured(const State& s1, const State& s2)
 {
 	return ((s1.w_captures != s2.w_captures) || (s1.b_captures != s2.b_captures));
 }

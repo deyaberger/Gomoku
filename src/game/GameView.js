@@ -224,10 +224,7 @@ class Infos {
 		let discretized_score = score == 0 ? 0 : (score / Math.abs(score)) * Math.log(Math.sqrt(Math.abs(score)) + 1);
 		discretized_score = Math.min(Math.max(parseInt(discretized_score), -5), 5);
 		let h = (1 - ((discretized_score + 5) / 10)) * 100;
-		console.log("SCORE = ", score, "DISCRETIZED SCORE = ", discretized_score);
 		height = h + "%";
-		console.log("HEIGHT = ", height);
-
 		$(".score > .column").animate({
 			"height": height,
 	  })
@@ -389,6 +386,10 @@ class Board {
 			{
 				this.place_void(i, j);
 			}
+			if (data.illegal_board[index] == "1")
+			{
+				this.place_illegal(i, j);
+			}
 		}
 	}
 
@@ -476,7 +477,7 @@ export default class GameView {
 
 
 	update(data) {
-		console.log(data);
+		// console.log(data);
 		if (data.type2 == "player_move")
 		{
 			if (this.vs_ai == false)

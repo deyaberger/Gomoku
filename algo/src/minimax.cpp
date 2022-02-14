@@ -314,7 +314,8 @@ int			minimax_fred(State state, int limit, std::deque<int> past_scores, int dept
 	std::pair<int, int>	babies[200]; 		// <Score, state_index>
 	State				babie_states[200];
 
-
+	if (state.last_chance)
+		limit += 1;
 	if (state.free_threes == 2)
 		return ILLEGAL;
 	if (state.game_win)
