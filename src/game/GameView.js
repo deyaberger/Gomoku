@@ -178,6 +178,7 @@ class Infos {
 			total_moves.textContent = "0\nmoves";
 			total_moves.innerHTML.replace(/\n\r?/g, '<br />');
 		}
+		this.moves = 0;
 	}
 
 	reset_score() {

@@ -59,8 +59,6 @@ ws.onError = function() {
 	}, 500);
 }
 
-ws.onClose = ws.onError;
-
 
 window.alert = function(msg, callback){
 	$('.popup').css({
