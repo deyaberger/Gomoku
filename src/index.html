@@ -7,10 +7,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link rel="shortcut icon" href="img/favicon.ico">
+	<script>
+				// Helper function
+		let domReady = (cb) => {
+			document.readyState === 'interactive' || document.readyState === 'complete'
+			? cb()
+			: document.addEventListener('DOMContentLoaded', cb);
+		};
+		
+		domReady(() => {
+			// Display body when DOM is loaded
+			document.body.style.visibility = 'visible';
+		});
+	</script>
 	<title>Home</title>
 </head>
 
 <body style="visibility: hidden;">
+<body>
 	<h1>
 		<div class = "title">GOMOKU</div>
 		<a class = "about" href = "#popup1"><button>about us</button></a>

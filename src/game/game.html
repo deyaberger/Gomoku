@@ -8,10 +8,15 @@
 	<title>Game</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link rel="shortcut icon" href="img/favicon.ico">
+	<script>
+		$( document ).ready(function() {
+			document.body.style.visibility = 'visible';
+		});
+	</script>
 </head>
 
-<body>
-	<div id = "app" style="visibility: hidden">
+<body style="visibility: hidden">
+	<div id = "app">
 		<div class = "header">
 		<div class = "total_moves">
 			<p>0</br>moves</p>
@@ -89,7 +94,7 @@
 	<div class = "popup" id = "popup">
 	<div class='customAlert'>
 		<p class='message'></p>
-		  <input type='button' class='confirmButton' value='Ok' Id = "ok">
+		  <input type='button' class='confirmButton' value='OK' Id = "ok" >
 	</div>
 	</div>
 </body>
