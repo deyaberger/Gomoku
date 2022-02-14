@@ -2,6 +2,8 @@ import "./game.scss";
 import GameView from "./GameView.js";
 import Ws from "../Communicate.js";
 
+var open = 0;
+
 var form = JSON.parse(sessionStorage.getItem("form"));
 
 let ws = new Ws();
@@ -10,6 +12,7 @@ let gameview = new GameView(form);
 
 ws.new_connection(gameview);
 ws.onOpen = function() {
+	open = 1;
 	ws.co.send(form.data);
 }
 
@@ -57,6 +60,12 @@ ws.onError = function() {
 		alert("It seems like the server is not running, so maybe just start it and reload the page. If it still doesn't work, well... too bad for you", function(){
 		});
 	}, 500);
+}
+
+if (open == 1)
+{
+	ws.onClose = ws.onError;
+	open = 0;
 }
 
 
