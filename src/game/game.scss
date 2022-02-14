@@ -506,6 +506,102 @@ input:checked + .slider:before {
   transform: translateX(18px);
 }
 
+.popup {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.7);
+	transition: opacity 500ms;
+	z-index: 1;
+	visibility: hidden;
+}
+
+
+.customAlert {
+	display: none;
+	position: fixed;
+	max-width: 400px;
+	min-width: 200px !important;
+	min-height: 10%;
+	height: 160px;
+	text-transform: lowercase;
+	left: 50%;
+	top: 50%;
+	padding: 10px;
+	box-sizing: border-box;
+	margin-left: -12.5%;
+	margin-top: -5.2%;
+	background: #89a7ace3;
+  
+	@media all and (max-width: 1300px) {
+	  .message {
+		font-size: 15px !important;
+	  }
+	  input[type="button"] {
+		height: 20% !important;
+	  }
+	}
+  
+	.message {
+	  font-family: "Open Sans", "Open-sans dd", sans-serif;
+	  letter-spacing: 2px;
+	  padding: 5px;
+	  color: white;
+	  line-height: 20px;
+	  text-align: justify;
+	}
+  
+	input[type="button"] {
+	  position: absolute;
+	  top: 100%;
+	  left: 50%;
+	  width: 50%;
+		text-transform: uppercase;
+		font-size:18px;
+	  margin-top: -45px;
+	  margin-left: -25%;
+	  outline: 0;
+	  border: 0;
+	  background: #9bdfebe3;
+	  color: white;
+	  &:hover {
+		transition: 0.3s;
+		cursor: pointer;
+		background: lighten(#9bdfeb, 5%);
+	  }
+	}
+  }
+  
+  .rab {
+	width: 200px;
+	height: 30px;
+	outline: 0;
+	border: 0;
+	color: white;
+	background: darken(#04b486, 5%);
+  }
+  
+  @keyframes fadeOut {
+	from {
+	  opacity: 1;
+	}
+	to {
+	  opacity: 0;
+	}
+  }
+  
+  @keyframes fadeIn {
+	from {
+	  opacity: 0;
+	}
+	to {
+	  opacity: 1;
+	}
+  }
+
+
 html {
   display: unset;
   visibility: visible;

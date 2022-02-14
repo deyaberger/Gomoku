@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CPP_COMPILER g++-10)
 set(CMAKE_CXX_COMPILER g++-10)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-O3 -D MULTIFRED 1")
+set(CMAKE_CXX_FLAGS "-O3")
 project(Roobik VERSION 0.1.0)
 
 find_package(Threads REQUIRED)

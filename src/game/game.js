@@ -44,10 +44,51 @@ span.onclick = function() {
 	var modalImg = document.getElementById("img01");
 	modal.style.display = "none";
 	modalImg.remove();
-	modalImg = document.createElement("embed");
+	modalImg = document.createElement("img");
 	modalImg.setAttribute('class', "modal-content");
 	modalImg.setAttribute('id', "img01");
 	modalImg.setAttribute('height', "100%");
-	modalImg.setAttribute('frameBorder', "0");
 	modal.insertBefore(modalImg, caption);
 }
+
+
+ws.onError = function() {
+	setTimeout(function(){
+		alert("It seems like the server is not running, so maybe just start it and reload the page. If it still doesn't work, well... too bad for you", function(){
+		});
+	}, 500);
+}
+
+ws.onClose = ws.onError;
+
+
+window.alert = function(msg, callback){
+	$('.popup').css({
+		'visibility' : 'visible',
+		'opacity' : '1',
+	})
+	$('.message').text(msg);
+	$('.customAlert').css('animation', 'fadeIn 0.3s linear');
+	$('.customAlert').css('display', 'inline');
+	setTimeout(function(){
+	  $('.customAlert').css('animation', 'none');
+	}, 300);
+	currentCallback = callback;
+  }
+
+$('.confirmButton').click(function(){
+	$('.customAlert').css('animation', 'fadeOut 0.3s linear');
+	setTimeout(function(){
+	$('.customAlert').css('animation', 'none');
+		$('.customAlert').css('display', 'none');
+	}, 300);
+	$('.popup').css({
+		'visibility' : 'hiddden',
+		'opacity' : '0',
+	})
+	currentCallback();
+	});
+
+
+var currentCallback;
+

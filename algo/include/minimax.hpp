@@ -16,6 +16,7 @@ int		minimax_beam(State state, int limit, int depth = 0, int alpha = BLACK_WIN, 
 
 int		minimax_fred_start(thread_pool& pool, State state, int limit, std::deque<int> past_scores = std::deque<int>(), bool return_eval = false);
 int		minimax_fred_start_brother(State state, int limit);
+int		minimax_fred_start_brother_k_beam(State state, int limit);
 int		minimax_fred(State state, int limit, std::deque<int> past_scores = std::deque<int>(),  int depth = 1, int alpha = BLACK_WIN, int beta =  WHITE_WIN);
 
 

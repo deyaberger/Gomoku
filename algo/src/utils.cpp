@@ -16,5 +16,3 @@ int			get_move_keyboard(void)
 	return (r * BOARD_WIDTH + c);
 }
 
-
-

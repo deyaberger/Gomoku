@@ -70,6 +70,9 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 	State				babie_states[200];
 	int					bestEval;
 
+	static int nodes = 0;
+
+	nodes += 1;
 	if (state.free_threes == 2)
 		return ILLEGAL;
 	if (state.game_win)
@@ -106,6 +109,8 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 		}
 		if (depth == 0)
 		{
+			std::cout << "NODES: " << nodes << std::endl;
+			nodes = 0;
 			return best_move;
 		}
 		else
@@ -136,6 +141,8 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 	}
 	if (depth == 0)
 	{
+		std::cout << "NODES: " << nodes << std::endl;
+		nodes = 0;
 		return best_move;
 	}
 	else
@@ -320,6 +327,7 @@ int			minimax_fred(State state, int limit, std::deque<int> past_scores, int dept
 	fill_baby_tables(babies, babie_states, state, counter);
 
 
+
 	if (maximizer)
 	{
 		bestEval = INT32_MIN;
@@ -400,7 +408,6 @@ int			minimax_fred_root(State state, int limit, std::deque<int> past_scores, int
 		return state.score;
 
 	fill_baby_tables(babies, babie_states, state, counter);
-
 
 	if (maximizer)
 	{
@@ -494,12 +501,6 @@ int			minimax_fred_start_brother(State state, int limit)
 			if (first)
 			{
 				eval = minimax_fred_start(pool, babie_states[babies[i].second], limit - 1, past_scores, true);
-				// eval = minimax_fred(babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta);
-				// if (eval != fred_eval)
-				// {
-				// 	std::cout << "eval: " << eval << ", nulti: " << fred_eval <<std::endl;
-				// 	babie_states[babies[i].second].print();
-				// }
 				if (eval != ILLEGAL)
 				{
 					first = false;
@@ -517,7 +518,8 @@ int			minimax_fred_start_brother(State state, int limit)
 			}
 			else
 			{
-				fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
+				fut_queue.push(pool.submit(minimax_fred_root, babie_states[babies[i].second], limit, past_scores, depth + 1, std::ref(alpha), std::ref(beta)));
+				// fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
 				move_queue.push(babie_states[babies[i].second].last_move);
 			}
 		}
@@ -547,12 +549,6 @@ int			minimax_fred_start_brother(State state, int limit)
 			if (first)
 			{
 				eval = minimax_fred_start(pool, babie_states[babies[i].second], limit - 1, past_scores, true);
-				// eval = minimax_fred(babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta);
-				// if (eval != fred_eval)
-				// {
-				// 	std::cout << "eval: " << eval << ", nulti: " << fred_eval <<std::endl;
-				// 	babie_states[babies[i].second].print();
-				// }
 				if (eval != ILLEGAL)
 				{
 					first = false;
@@ -570,7 +566,8 @@ int			minimax_fred_start_brother(State state, int limit)
 			}
 			else
 			{
-				fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
+				fut_queue.push(pool.submit(minimax_fred_root, babie_states[babies[i].second], limit, past_scores, depth + 1, std::ref(alpha), std::ref(beta)));
+				// fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
 				move_queue.push(babie_states[babies[i].second].last_move);
 			}
 		}
@@ -686,3 +683,393 @@ int			minimax_fred_start(thread_pool& pool, State state, int limit, std::deque<i
 		return (best_move);
 	}
 }
+
+
+
+
+
+int			minimax_fred_k_beam(State state, int limit, int depth, int alpha, int beta)
+{
+	bool				maximizer		= (state.player == WHITE);
+	int 				best_move 		= -12;
+	int 				counter  		= 0;
+	int 				eval;
+	int					bestEval;
+	std::pair<int, int>	babies[200]; 		// <Score, state_index>
+	State				babie_states[200];
+
+
+	if (state.free_threes == 2)
+		return ILLEGAL;
+	if (state.game_win)
+		return state.score;
+	if (depth == limit)
+		return (state.score);
+
+	fill_baby_tables(babies, babie_states, state, counter);
+
+
+	if (maximizer)
+	{
+		bestEval = INT32_MIN;
+		std::sort(babies, babies + counter, compare_score);
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			eval = minimax_fred_k_beam(babie_states[babies[i].second], limit, depth + 1, alpha, beta);
+			if (eval != ILLEGAL)
+			{
+				if (eval > bestEval)
+				{
+					best_move = babie_states[babies[i].second].last_move;
+					bestEval = eval;
+				}
+				alpha = std::max(alpha, eval);
+				if (beta <= alpha)
+				{
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		bestEval = INT32_MAX;
+		std::sort(babies, babies + counter, compare_score_reverse); 
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			eval = minimax_fred_k_beam(babie_states[babies[i].second], limit, depth + 1, alpha, beta);
+			if (eval != ILLEGAL)
+			{
+				if (eval < bestEval)
+				{
+					best_move = babie_states[babies[i].second].last_move;
+					bestEval = eval;
+				}
+				beta = std::min(beta, eval);
+				if (beta <= alpha)
+				{
+					break;
+				}
+			}
+		}
+	}
+	if (depth == 0)
+	{
+		return best_move;
+	}
+	else
+	{
+		return (bestEval);
+	}
+}
+
+
+int			minimax_fred_root_k_beam(State state, int limit,  int depth, int &root_alpha, int &root_beta)
+{
+	int					alpha			= root_alpha;
+	int					beta			= root_beta;
+	bool				maximizer		= (state.player == WHITE);
+	int 				best_move 		= -12;
+	int 				counter  		= 0;
+	int 				eval;
+	int					bestEval;
+	std::pair<int, int>	babies[200]; 		// <Score, state_index>
+	State				babie_states[200];
+
+	// std::cout << "alpha beta" << alpha << ", " << beta << std::endl;
+
+	if (state.free_threes == 2)
+		return ILLEGAL;
+	if (state.game_win)
+		return state.score;
+	if (depth == limit)
+		return (state.score);
+
+
+	fill_baby_tables(babies, babie_states, state, counter);
+
+	if (maximizer)
+	{
+		bestEval = INT32_MIN;
+		std::sort(babies, babies + counter, compare_score);
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			eval = minimax_fred_k_beam(babie_states[babies[i].second], limit, depth + 1, alpha, beta);
+			if (eval != ILLEGAL)
+			{
+				if (eval > bestEval)
+				{
+					best_move = babie_states[babies[i].second].last_move;
+					bestEval = eval;
+				}
+				alpha = std::max(alpha, eval);
+				beta  = std::min(read_alpha_beta(root_beta), beta);
+				if (beta <= alpha)
+				{
+					break;
+				}
+			}
+		}
+		update_beta_if_needed(root_beta, bestEval);
+	}
+	else
+	{
+		bestEval = INT32_MAX;
+		std::sort(babies, babies + counter, compare_score_reverse); 
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			eval = minimax_fred_k_beam(babie_states[babies[i].second], limit,  depth + 1, alpha, beta);
+			if (eval != ILLEGAL)
+			{
+				if (eval < bestEval)
+				{
+					best_move = babie_states[babies[i].second].last_move;
+					bestEval = eval;
+				}
+				beta = std::min(beta, eval);
+				alpha = std::min(read_alpha_beta(root_alpha), alpha);
+				if (beta <= alpha)
+				{
+					break;
+				}
+			}
+		}
+		update_alpha_if_needed(root_alpha, bestEval);
+	}
+	if (depth == 0)
+	{
+		return best_move;
+	}
+	else
+	{
+		return (bestEval);
+	}
+}
+
+
+int			minimax_fred_start_k_beam(thread_pool& pool, State state, int limit, bool return_eval)
+{
+	int 							alpha 		= BLACK_WIN;
+	int 							beta 		= WHITE_WIN;
+	bool							maximizer 	= (state.player == WHITE);
+	int 							eval;
+	int 							best_move 	= -12;
+	int								counter 	= 0;
+	bool							first 		= false;
+	int								bestEval;
+	// thread_pool 					pool(std::thread::hardware_concurrency() - 1);
+	std::queue<std::future<int>> 	fut_queue;
+	std::queue<int>				 	move_queue;
+	// std::deque<int> 				past_scores;
+	State							babie_states[200];
+	std::pair<int, int>				babies[200]; 	// <Score, state_index>
+
+	// std::cout << "Started thread pool with: " << pool.get_thread_count() << " threads." << std::endl;
+	fill_baby_tables(babies, babie_states, state, counter);
+
+
+	if (maximizer)
+	{
+		bestEval = INT32_MIN;
+		std::sort(babies, babies + counter, compare_score);
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			fut_queue.push(pool.submit(minimax_fred_root_k_beam, babie_states[babies[i].second], limit, 1, std::ref(alpha), std::ref(beta)));
+			move_queue.push(babie_states[babies[i].second].last_move);
+		}
+		pool.wait_for_tasks();
+		while(! fut_queue.empty())
+		{
+			eval = fut_queue.front().get();
+			int tmp_move = move_queue.front();
+			move_queue.pop();
+			fut_queue.pop();
+			if (eval != ILLEGAL)
+			{
+				if (eval > bestEval)
+				{
+					best_move = tmp_move;
+					bestEval = eval;
+				}
+			}
+		}
+	}
+	else
+	{
+		bestEval = INT32_MAX;
+		std::sort(babies, babies + counter, compare_score_reverse); 
+		for(int i = 0; i < counter; i++)
+		{
+			fut_queue.push(pool.submit(minimax_fred_root_k_beam, babie_states[babies[i].second], limit,  1, std::ref(alpha), std::ref(beta)));
+			move_queue.push(babie_states[babies[i].second].last_move);
+		}
+		pool.wait_for_tasks();
+		while(!fut_queue.empty())
+		{
+			eval = fut_queue.front().get();
+			int tmp_move = move_queue.front();
+			move_queue.pop();
+			fut_queue.pop();
+			if (eval != ILLEGAL)
+			{
+				if (eval < bestEval)
+				{
+					best_move = tmp_move;
+					bestEval = eval;
+				}
+			}
+		}
+	}
+	if (return_eval)
+	{
+		return (bestEval);
+	}
+	else
+	{
+		return (best_move);
+	}
+}
+
+
+int			minimax_fred_start_brother_k_beam(State state, int limit)
+{
+	int 							depth 	= 0;
+	int 							alpha 	= BLACK_WIN;
+	int 							beta 	= WHITE_WIN;
+	bool							maximizer = (state.player == WHITE);
+	int 							eval;
+	int 							best_move = -12;
+	int								counter = 0;
+	bool							first 	= true;
+	int								bestEval;
+	thread_pool 					pool(11);
+	std::queue<std::future<int>> 	fut_queue;
+	std::queue<int>				 	move_queue;
+	State							babie_states[200];
+	std::pair<int, int>				babies[200]; 	// <Score, state_index>
+
+
+	// std::cout << "Started thread pool with: " << pool.get_thread_count() << " threads." << std::endl;
+	fill_baby_tables(babies, babie_states, state, counter);
+
+
+	if (maximizer)
+	{
+		bestEval = INT32_MIN;
+		std::sort(babies, babies + counter, compare_score);
+		for(int i = 0; i < counter; i++)
+		{
+			if (i == K_BEAM)
+				break;
+			if (first)
+			{
+				eval = minimax_fred_start_k_beam(pool, babie_states[babies[i].second], limit - 1, true);
+				if (eval != ILLEGAL)
+				{
+					first = false;
+					if (eval > bestEval)
+					{
+						best_move = babie_states[babies[i].second].last_move;
+						bestEval = eval;
+					}
+					alpha = std::max(alpha, eval);
+					if (beta <= alpha)
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				fut_queue.push(pool.submit(minimax_fred_root_k_beam, babie_states[babies[i].second], limit,  depth + 1, std::ref(alpha), std::ref(beta)));
+				// fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
+				move_queue.push(babie_states[babies[i].second].last_move);
+			}
+		}
+		pool.wait_for_tasks();
+		while(! fut_queue.empty())
+		{
+			eval = fut_queue.front().get();
+			int tmp_move = move_queue.front();
+			move_queue.pop();
+			fut_queue.pop();
+			if (eval != ILLEGAL)
+			{
+				if (eval > bestEval)
+				{
+					best_move = tmp_move;
+					bestEval = eval;
+				}
+			}
+		}
+	}
+	else
+	{
+		bestEval = INT32_MAX;
+		std::sort(babies, babies + counter, compare_score_reverse); 
+		for(int i = 0; i < counter; i++)
+		{
+			if (first)
+			{
+				eval = minimax_fred_start_k_beam(pool, babie_states[babies[i].second], limit - 1,  true);
+				if (eval != ILLEGAL)
+				{
+					first = false;
+					if (eval < bestEval)
+					{
+						best_move = babie_states[babies[i].second].last_move;
+						bestEval = eval;
+					}
+					beta = std::min(beta, eval);
+					if (beta <= alpha)
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				fut_queue.push(pool.submit(minimax_fred_root_k_beam, babie_states[babies[i].second], limit,  depth + 1, std::ref(alpha), std::ref(beta)));
+				// fut_queue.push(pool.submit(minimax_fred, babie_states[babies[i].second], limit, past_scores, depth + 1, alpha, beta));
+				move_queue.push(babie_states[babies[i].second].last_move);
+			}
+		}
+		pool.wait_for_tasks();
+		while(!fut_queue.empty())
+		{
+			eval = fut_queue.front().get();
+			int tmp_move = move_queue.front();
+			move_queue.pop();
+			fut_queue.pop();
+			if (eval != ILLEGAL)
+			{
+				if (eval < bestEval)
+				{
+					best_move = tmp_move;
+					bestEval = eval;
+				}
+			}
+		}
+	}
+	if (depth == 0)
+	{
+		// std::cout << "best eval bro: " << bestEval << std::endl;
+		return (best_move);
+	}
+	else
+	{
+		return (bestEval);
+	}
+}
+
+

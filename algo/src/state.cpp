@@ -417,7 +417,7 @@ State			State::make_baby_from_coord_no_eval(int coord)
 }
 
 
-State			State::make_baby_from_coord(int coord)
+State			State::make_baby_from_coord(int coord) const
 {
 	State s = *this;
 	s.coord_evaluation_function = this->coord_evaluation_function;
@@ -527,11 +527,6 @@ bool			State::count_to_5(int row, int col, int player)
 {
 	if (count_to_5(row, col, 0, 1, player) or count_to_5(row, col, 1, 0, player) or	count_to_5(row, col, 1, 1, player) or count_to_5(row, col, 1, -1, player))
 	{
-		// std::cout << "---------------------" << std::endl;
-		// std::cout << "Count 5 at: " << row << ", " << col << " for player: " << player << std::endl;
-		// this->print();
-		// std::cout << "---------------------" << std::endl;
-
 		return true;
 	}
 	return false;
@@ -557,9 +552,8 @@ bool			State::can_capture_to_avoid_defeat(void)
 			if (is_illegal(bb))
 				continue;
 			new_captures = bb.get_enemy_captures();
-			if (bb.get_enemy_captures() == 5)
+			if (new_captures == 5)
 			{
-				// std::cout << "yes for captures" << std::endl;
 				return true;
 			}
 			if ((new_captures != previous_captures) && not bb.count_to_5(last_row, last_col, bb.player))
@@ -603,13 +597,10 @@ bool			State::is_win(void)
 		this->last_chance		= true;
 		this->last_chance_move	= this->last_move;
 		this->game_win			= not this->can_capture_to_avoid_defeat();
-		// this->game_win			= true;
-
-
-		// std::cout << "can capture: " << not this->game_win << std::endl;
 
 		if (this->game_win)
 			this->winner		= next_player(this->player);
+			
 		return this->game_win;
 	}
 
@@ -636,4 +627,38 @@ bitboard		State::make_illegal_move_board(void)
 		}
 	}
 	return illegals;
+}
+
+
+bool		was_anything_captured(const State& s1, const State& s2)
+{
+	return ((s1.w_captures != s2.w_captures) || (s1.b_captures != s2.b_captures));
+}
+
+
+State			capture_baby(const State& state, int coord)
+{
+	State s = state;
+	s.coord_evaluation_function = state.coord_evaluation_function;
+	// std::cout << "Set piece: " << coord << std::endl;
+	s.set_piece(coord);
+	// std::cout << "Captures" << std::endl;
+	s.compute_captures();
+	return (s);
+}
+
+
+bool			State::is_possible_capture(void)
+{
+	for (int c = 0; c < BOARD_SIZE; c++)
+	{
+		if (this->live_board.test(c))
+		{
+			if (was_anything_captured(capture_baby(*this, c), *this))
+			{
+				return (true);
+			}
+		}
+	}
+	return (false);
 }
