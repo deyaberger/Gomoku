@@ -22,6 +22,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
+// #include <math>
 
 #include "state.hpp"
 #include "minimax.hpp"
@@ -85,7 +86,6 @@ static void	add_board_to_json(json &response, State s)
 	illegal_sstr << s.make_illegal_move_board() << std::endl;
 	std::string illegal_str = illegal_sstr.str();
 	response["illegal_board"] = illegal_str;
-	std::cout << "illegal: " << illegal_str << std::endl;
 }
 
 
@@ -99,6 +99,23 @@ static void	add_game_state_to_json(json &response, State &s)
 	response["b_captures"] 	= s.b_captures;
 	response["score"] 		= s.score;
 
+}
+
+
+float       norm_eval(int eval)
+{
+	// return eval;
+	float out = eval;
+	std::cout << "EVALLL: " << eval << std::endl;
+	if (eval == 0)
+		return 0;
+	int sign = (eval < 0) ? -1 : 1;
+	out = sign * out * 5;
+	out = log10f32(out + 1) * sign;
+	out = std::max<float>(out, -5.0);
+	out = std::min<float>(out, 5.0);
+	std::cout << "norm: " << out << std::endl;
+	return out;
 }
 
 #define MSGLEN 2048
@@ -119,6 +136,7 @@ public:
 	game_handler();
 	~game_handler();
 	bool	waiting_on_AI = false;
+	int		eval = 0;
 
 
 	std::string	handle_message(std::string msg);
@@ -160,8 +178,8 @@ std::string 	game_handler::handle_message_start(json json_msg)
 	this->waiting_on_AI = false;
 	this->cpu           = json_msg["cpu"];
 	this->depth         = json_msg["depth"];
-	// this->k_beam        = json_msg["k_beam"];
-
+	this->k_beam        = json_msg["k_beam"];
+	potential_capture_value 	= POTENTIAL_CAPTURE_VALUE;
 
 	json response;
 
@@ -202,6 +220,7 @@ std::string		game_handler::play_received_move(json json_msg)
 		std::cout << "Illegal move, reverting" << std::endl;
 	}
 	add_game_state_to_json(response, this->s);
+	response["score"] = norm_eval(this->eval);
 	if (!was_anything_captured(this->s, tmp)  && tmp.is_possible_capture())
 	{
 		potential_capture_value = (potential_capture_value * 8) / 9;
@@ -226,17 +245,17 @@ std::string		game_handler::AI_move_or_predict(void)
 		if (this->k_beam)
 		{
 			#ifdef SINGLE_THREAD
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth));
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth, &this->eval));
 			#else
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth));
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth, &this->eval));
 			#endif
 		}
 		else
 		{
 			#ifdef SINGLE_THREAD
-				this->s = this->s.make_baby_from_coord(minimax_single_fred(s, this->depth));
+				this->s = this->s.make_baby_from_coord(minimax_single_fred(s, this->depth, std::deque<int>(), 0, BLACK_WIN, WHITE_WIN, &this->eval));
 			#else
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother(s, this->depth + 3));
+				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother(s, this->depth, &this->eval));
 			#endif
 		}
 		response["type2"] = "AI_move";
@@ -249,17 +268,17 @@ std::string		game_handler::AI_move_or_predict(void)
 		if (this->k_beam)
 		{
 			#ifdef SINGLE_THREAD
-				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth);
+				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth, &this->eval);
 			#else
-				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth);
+				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth, &this->eval);
 			#endif
 		}
 		else
 		{
 			#ifdef SINGLE_THREAD
-				response["suggested_move"] = minimax_single_fred(s, this->depth);
+				response["suggested_move"] = minimax_single_fred(s, this->depth, std::deque<int>(), 0, BLACK_WIN, WHITE_WIN, &this->eval);
 			#else
-				response["suggested_move"] = minimax_fred_start_brother(s, this->depth);
+				response["suggested_move"] = minimax_fred_start_brother(s, this->depth, &this->eval);
 			#endif
 		}
 		response["type2"] = "AI_move_suggestion";
@@ -269,6 +288,7 @@ std::string		game_handler::AI_move_or_predict(void)
     response["thinking_time"] = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
 	add_game_state_to_json(response, this->s);
+	response["score"] = norm_eval(this->eval);
 	this->waiting_on_AI = false;
     return (response.dump().c_str());
 }

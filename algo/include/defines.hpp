@@ -24,37 +24,32 @@
 #define DOWN_RIGHT		(DOWN + RIGHT)
 #define DOWN_LEFT		(-(DOWN - RIGHT))
 
-#define PAIR_VALUE		2
-#define TRIPLET_VALUE	4
-#define QUATOR_VALUE	8
 
-
-#define CAPTURE_VALUE	128
+#define CAPTURE_VALUE	512
 
 #define TACTICS_LEN		4		// * tactics need to induce a positive score TACTICS_LEN folds further or they will be pruned
 
 #define	SURROUND_SIZE	2		// * SIZE OF THE SQUARE CONSIDERED IN THE EVAL FUNCTION (IN EITHER DIRECTION) eval cpp assumes this is set to 2 in certain lline be carefull
 
 #define ILLEGAL			-1
-
 #define BLACK_WIN		(INT32_MIN + 1)
 #define WHITE_WIN		(INT32_MAX - 1)
 
-//  The following lines are not used anymore
-#define PORTNO			1234
-#define RESET_MOVE		1234
-#define	DEPTH			7
 #define	K_BEAM			3
 
-#define POTENTIAL_CAPTURES true
-#define POTENTIAL_CAPTURE_VALUE (CAPTURE_VALUE / 8)
-static int potential_capture_value = 0;
+#define POTENTIAL_CAPTURE
+#define POTENTIAL_CAPTURE_VALUE 	(CAPTURE_VALUE / 8)
+static int potential_capture_value 	= POTENTIAL_CAPTURE_VALUE;
 
+#define INCREASING_CAPTURE_VALUE
+
+// #define FASTER_KILL
 
 typedef std::bitset<BOARD_SIZE> bitboard;
 
-// #define MULTIFRED		1 // 1 = multithreaded, 0 = singlethreaded
 
-#define SINGLE_THREAD
+// #define SINGLE_THREAD
 
+#define MINMAX_CLASSIC 	1
+#define MINMAX_BEAM  	2
 #endif

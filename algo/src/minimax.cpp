@@ -59,7 +59,7 @@ void	fill_baby_tables(std::pair<int, int>* babies , State* babie_states, State &
 
 
 
-int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, int depth, int alpha, int beta)
+int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, int depth, int alpha, int beta, int *out_eval)
 {
 	bool				maximizer = (state.player == WHITE);
 	int 				best_move = -12;
@@ -70,9 +70,7 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 	State				babie_states[200];
 	int					bestEval;
 
-	static int nodes = 0;
 
-	nodes += 1;
 	if (state.free_threes == 2)
 		return ILLEGAL;
 	if (state.game_win)
@@ -109,8 +107,8 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 		}
 		if (depth == 0)
 		{
-			std::cout << "NODES: " << nodes << std::endl;
-			nodes = 0;
+			if (out_eval != nullptr)
+				*out_eval = bestEval;
 			return best_move;
 		}
 		else
@@ -141,8 +139,8 @@ int		minimax_single_fred(State state, int limit, std::deque<int> past_scores, in
 	}
 	if (depth == 0)
 	{
-		std::cout << "NODES: " << nodes << std::endl;
-		nodes = 0;
+		if (out_eval != nullptr)
+			*out_eval = bestEval;
 		return best_move;
 	}
 	else
@@ -297,10 +295,6 @@ inline void update_beta_if_needed(int &beta, int new_ab)
 }
 
 
-int			minimax_multifred(thread_pool& pool, State state, int limit, std::deque<int> past_scores, int depth, int alpha, int beta)
-{
-	return minimax_fred_start_brother(state, depth);
-}
 
 
 int			minimax_fred(State state, int limit, std::deque<int> past_scores, int depth, int alpha, int beta)
@@ -460,7 +454,7 @@ int			minimax_fred_root(State state, int limit, std::deque<int> past_scores, int
 	}
 	if (depth == 0)
 	{
-		return best_move;
+		return best_move - (maximizer ? 1 : -1);
 	}
 	else
 	{
@@ -469,7 +463,7 @@ int			minimax_fred_root(State state, int limit, std::deque<int> past_scores, int
 }
 
 
-int			minimax_fred_start_brother(State state, int limit)
+int			minimax_fred_start_brother(State state, int limit, int *out_eval)
 {
 	int 							depth 	= 0;
 	int 							alpha 	= BLACK_WIN;
@@ -592,6 +586,8 @@ int			minimax_fred_start_brother(State state, int limit)
 	if (depth == 0)
 	{
 		// std::cout << "best eval bro: " << bestEval << std::endl;
+		if (out_eval != nullptr)
+			*out_eval = bestEval;
 		return (best_move);
 	}
 	else
@@ -684,7 +680,6 @@ int			minimax_fred_start(thread_pool& pool, State state, int limit, std::deque<i
 		return (best_move);
 	}
 }
-
 
 
 
@@ -942,7 +937,7 @@ int			minimax_fred_start_k_beam(thread_pool& pool, State state, int limit, bool 
 }
 
 
-int			minimax_fred_start_brother_k_beam(State state, int limit)
+int			minimax_fred_start_brother_k_beam(State state, int limit, int *out_eval)
 {
 	int 							depth 	= 0;
 	int 							alpha 	= BLACK_WIN;
@@ -1065,6 +1060,8 @@ int			minimax_fred_start_brother_k_beam(State state, int limit)
 	if (depth == 0)
 	{
 		// std::cout << "best eval bro: " << bestEval << std::endl;
+		if (out_eval != nullptr)
+			*out_eval = bestEval;
 		return (best_move);
 	}
 	else
@@ -1074,3 +1071,7 @@ int			minimax_fred_start_brother_k_beam(State state, int limit)
 }
 
 
+// std::pair<int, int> minimax_starter(State state, int limit, int type)
+// {
+
+// }

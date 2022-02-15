@@ -115,10 +115,10 @@ int main()
 
 	// fut2.wait_for(std::chrono::seconds(1));
 
-	// play_game(10, true, true, 40);
-	run_websocket_server("0.0.0.0", 16784);
+	play_game(10, true, true, 100);
+	// run_websocket_server("0.0.0.0", 16784);
 
-	// play_game_beam(7, true, true, 40);
+	// play_game(10, true, true, 100);
 
 	// State s;
 	// s.coord_evaluation_function = eval_surround_square;
