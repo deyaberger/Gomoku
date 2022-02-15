@@ -106,8 +106,14 @@ class Infos {
 		});
 	
 		$('.' + mark + '_player_captures .num').css({'padding-top': pixels + 'px'});
-	
+
+		if (Number(captures) * 2 == 10)
+		{
+			$('.' + mark + '_player_captures .num').animate({'left': '20%'});
+		}
+
 		$('.' + mark + '_player_captures .num').animate({'padding-top': pixels + 'px'});
+
 	}
 
 
@@ -163,6 +169,7 @@ class Infos {
 			background: '#90a4ae',
 		});
 		$('.num').css({
+			'left' : '30%',
 			'padding-top': '185px',
 		});
 		document.querySelectorAll(".num").forEach( number => {
