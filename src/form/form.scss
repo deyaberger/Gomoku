@@ -200,3 +200,12 @@ body {
     bottom: 100%;
   }
 }
+
+
+.home > img {
+	filter: invert(100%);
+	margin-left: 1.5%;
+	margin-top: 0.5%;
+	max-width: 3%;
+	left:0;
+}

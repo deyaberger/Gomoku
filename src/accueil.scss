@@ -28,6 +28,18 @@ h1 {
 	transform: translateX(50px);
 }
 
+.home {
+	max-width: 3%;
+	margin-left: 1%;
+	position: absolute;
+	left:0;
+}
+
+.home > img {
+	filter: invert(100%);
+}
+
+
 h1,.about {
 	margin-left: auto;
 	margin-right: 1.5%;
