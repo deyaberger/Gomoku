@@ -226,15 +226,8 @@ class Infos {
 
 	update_score(score)
 	{
-		var height = "50%";
-
-		let discretized_score = score == 0 ? 0 : (score / Math.abs(score)) * Math.log(Math.sqrt(Math.abs(score)) + 1);
-		discretized_score = Math.min(Math.max(parseInt(discretized_score), -5), 5);
-		let h = (1 - ((discretized_score + 5) / 10)) * 100;
-		height = h + "%";
-		console.log("SCORE = ", score);
-		console.log("DISCRETIZED SCORE ((score / |score|) * log(sqrt(|score|) + 1) = ", discretized_score);
-		console.log("HEIGHT = ", height);
+		let h = 100 - ((score + 5) * 10);
+ 		let height = h + "%";
 
 		$(".score > .column").animate({
 			"height": height,
