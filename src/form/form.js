@@ -43,7 +43,7 @@ if (k_beam)
 
 
 // Make sur we can send the form also by clicking on the save button
-var click_start = document.getElementsByTagName("a")[0];
+var click_start = document.getElementById("game_link");
 
 if (click_start){
 	click_start.addEventListener("click", function () {start()});

@@ -52,6 +52,7 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
-		"chrono": "cpp"
+		"chrono": "cpp",
+		"*.ipp": "cpp"
 	}
 }

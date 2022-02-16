@@ -37,7 +37,7 @@
 
 #define	K_BEAM			3
 
-#define POTENTIAL_CAPTURE
+// #define POTENTIAL_CAPTURE
 #define POTENTIAL_CAPTURE_VALUE 	(CAPTURE_VALUE / 8)
 static int potential_capture_value 	= POTENTIAL_CAPTURE_VALUE;
 
@@ -48,7 +48,7 @@ static int potential_capture_value 	= POTENTIAL_CAPTURE_VALUE;
 typedef std::bitset<BOARD_SIZE> bitboard;
 
 
-// #define SINGLE_THREAD
+#define SINGLE_THREAD
 
 #define MINMAX_CLASSIC 	1
 #define MINMAX_BEAM  	2

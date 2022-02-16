@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS "-O3")
 project(Roobik VERSION 0.1.0)
 
 find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 
 
@@ -22,6 +23,7 @@ set(SOURCES
     src/minimax.cpp
     src/pattern.cpp
     src/server_sync.cpp
+    # src/test.cpp
 )
 
 add_executable(Gomook ${SOURCES})
@@ -38,6 +40,8 @@ target_include_directories(Gomook
 
 set_property(TARGET Gomook PROPERTY CXX_STANDARD 17)
 target_link_libraries(Gomook PRIVATE Threads::Threads)
+target_link_libraries(Gomook PRIVATE OpenSSL::SSL)
+target_link_libraries(Gomook PRIVATE OpenSSL::Crypto)
 
 # set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 # set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

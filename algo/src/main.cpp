@@ -106,7 +106,7 @@ State play_game(int depth, bool cpu1, bool cpu2, int limit = 10, State s = State
 
 // #include "thread_pool.hpp"
 
-
+#include "test.hpp"
 int main()
 {
 	// thread_pool pool(std::thread::hardware_concurrency() - 1);
@@ -115,53 +115,7 @@ int main()
 
 	// fut2.wait_for(std::chrono::seconds(1));
 
-	play_game(10, true, true, 100);
-	// run_websocket_server("0.0.0.0", 16784);
-
 	// play_game(10, true, true, 100);
-
-	// State s;
-	// s.coord_evaluation_function = eval_surround_square;
-	// s = s.make_baby_from_coord(flat_coord(9, 9));
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;
-	// s = s.make_baby_from_coord(flat_coord(9, 10));
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;s = s.make_baby_from_coord(flat_coord(9, 8));
-	// s = s.make_baby_from_coord(flat_coord(9, 11));
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;
-	// std::cout << "/* message *//* message */" << std::endl;
-	// s.print();
-	// std::cout << "classic: " << minimax_fred(s, 6) << std::endl;
-	// std::cout << "ref:     " << minimax_fred_start(s, 7, true)  << std::endl;
-	// std::cout << "bro:     " << minimax_fred_start_brother(s, 7)  << std::endl;
-	// s = s.make_baby_from_coord(flat_coord(9, 9));
-	// s = s.make_baby_from_coord(flat_coord(8, 9));
-	// s = s.make_baby_from_coord(flat_coord(8, 8));
-	// s = s.make_baby_from_coord(flat_coord(7, 7));
-	// s = s.make_baby_from_coord(flat_coord(10, 10));
-	// s = s.make_baby_from_coord(flat_coord(6, 7));
-	// s = s.make_baby_from_coord(flat_coord(5, 7));
-	// s = s.make_baby_from_coord(flat_coord(7, 8));
-	// s = s.make_baby_from_coord(flat_coord(11, 11));
-	// s = s.make_baby_from_coord(flat_coord(12, 12));
-	// s = s.make_baby_from_coord(flat_coord(7, 6));
-	// s = s.make_baby_from_coord(flat_coord(9, 10));
-	// s.print();
-	// s = s.make_baby_from_coord(flat_coord(5, 6));
-	// s.print();
-	// std::cout << "win: " << s.game_win << " last chance: " << s.last_chance << " last chance move: " << s.last_chance_move << std::endl;
-	// s = s.make_baby_from_coord(flat_coord(10, 11));
-	// s.print();
-	// std::cout << "win: " << s.game_win << " last chance: " << s.last_chance << " last chance move: " << s.last_chance_move << std::endl;
-	// s = s.make_baby_from_coord(flat_coord(11, 12));
-	// s.print();
-	// // s = s.make_baby_from_coord(flat_coord(15, 15));
-	// // s.print();
-
-	// std::cout << "win: " << s.game_win << " last chance: " << s.last_chance << " last chance move: " << s.last_chance_move <<std::endl;
-	// run_websocket_server("0.0.0.0", 16784);
+	// runino();
+	run_websocket_server("0.0.0.0", 16784);
 }
