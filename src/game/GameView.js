@@ -490,7 +490,6 @@ export default class GameView {
 			}
 			this.board.update_illegals_and_captures(data, this.infos.turn);
 			this.infos.update_captures(data);
-			this.infos.update_score(data.score);
 			if(this.vs_ai == true)
 			{
 				this.infos.nextTurn();
@@ -520,6 +519,7 @@ export default class GameView {
 				}
 				this.infos.nextTurn();
 			}
+			this.infos.update_score(data.score);
 			this.infos.update_time(data.thinking_time);
 		}
 		if (data.winner == "black" || data.winner == "white")
