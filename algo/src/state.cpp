@@ -116,10 +116,10 @@ void			State::print(bool print_empty)
 
 	std::cout << "W captures: " << this->w_captures << std::endl;
 	std::cout << "B captures: " << this->b_captures << std::endl;
-	std::cout << "Win: " << this->game_win << std::endl;
-	std::cout << "Last chance: " << this->last_chance << std::endl;
-	std::cout << "Winner: " << this->winner << std::endl;
-	std::cout << "Score: " << this->score << std::endl;
+	// std::cout << "Win: " << this->game_win << std::endl;
+	// std::cout << "Last chance: " << this->last_chance << std::endl;
+	// std::cout << "Winner: " << this->winner << std::endl;
+	// std::cout << "Score: " << this->score << std::endl;
 
 	for (int c = 0; c < BOARD_WIDTH; c++)
 	{
@@ -241,6 +241,7 @@ inline void		increase_score_capture(int &score, int player_captures, int mult)
 	#endif
 }
 
+
 int				State::compute_captures(void)
 {
 	/*
@@ -353,35 +354,6 @@ int				State::compute_captures(void)
 	}
 	return (score);
 }
-
-
-// int				State::find_pattern_around_last_move(pattern_generator gen, int player) const
-// {
-// 	// ! UNTESTED !!
-// 	int directions[4] = {DOWN, RIGHT, DOWN_RIGHT, DOWN_LEFT};
-// 	int score = 0;
-// 	pattern p;
-// 	int last_move_r = this->last_move / BOARD_WIDTH;
-// 	int last_move_c = this->last_move % BOARD_WIDTH;
-// 	for (int dir : directions)
-// 	{
-// 		p = gen(dir, player, 0);
-// 		// print_pattern(p);
-// 		if (shift_pattern_to(p, last_move_r, last_move_c) and (*this == p))
-// 		{
-// 			score += 1;
-// 		}
-// 		for (int variant = 1; variant < p.size; variant++)
-// 		{
-// 			p = gen(dir, player, variant);
-// 			if (shift_pattern_to(p, last_move_r, last_move_c) and (*this == p))
-// 			{
-// 				score += 1;
-// 			}
-// 		}
-// 	}
-// 	return (score);
-// }
 
 
 inline bool 	State::operator==(const pattern& rhs) const

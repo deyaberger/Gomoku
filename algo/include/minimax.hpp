@@ -20,5 +20,7 @@ int		minimax_fred_start_brother(State state, int limit, int *out_eval = nullptr)
 int		minimax_fred_start_brother_k_beam(State state, int limit, int *out_eval = nullptr);
 int		minimax_fred(State state, int limit, std::deque<int> past_scores = std::deque<int>(),  int depth = 1, int alpha = BLACK_WIN, int beta =  WHITE_WIN);
 
+std::pair<int, int> minimax_starter(State state, int limit, int type = MINMAX_CLASSIC);
+
 
 #endif // !MINIMAX_H

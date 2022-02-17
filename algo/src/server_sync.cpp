@@ -22,11 +22,14 @@
 #include <string>
 #include <thread>
 #include <chrono>
-#include <boost/beast/websocket/ssl.hpp>
-#include <boost/asio/ssl/stream.hpp>
-#include <boost/beast/ssl.hpp>
 
-// #include <math>
+
+#ifdef SSL
+	#include <boost/beast/websocket/ssl.hpp>
+	#include <boost/asio/ssl/stream.hpp>
+	#include <boost/beast/ssl.hpp>
+	namespace ssl = boost::asio::ssl;       // from <boost/asio/ssl.hpp>
+#endif
 
 #include "state.hpp"
 #include "minimax.hpp"
@@ -36,7 +39,6 @@ using json = nlohmann::json;
 
 // #include <boost/json.hpp>
 
-namespace ssl = boost::asio::ssl;       // from <boost/asio/ssl.hpp>
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
@@ -129,12 +131,11 @@ float       norm_eval(int eval)
 class game_handler
 {
 private:
-	int 	sockfd;
 	State	s;
 	bool 	cpu;
 	bool	game_over = false;
 	int		depth;
-	int		k_beam = false;
+	int		algo_type = MINMAX_CLASSIC;
 	bool	was_possible_capture = false;
 
 public:
@@ -171,11 +172,6 @@ bool			game_handler::is_game_over(void)
 }
 
 
-// void	prep(State &s)
-// {
-// 	s = s.make_baby_from_coord();
-// }
-
 std::string 	game_handler::handle_message_start(json json_msg)
 {
 	this->s = State();
@@ -183,7 +179,7 @@ std::string 	game_handler::handle_message_start(json json_msg)
 	this->waiting_on_AI = false;
 	this->cpu           = json_msg["cpu"];
 	this->depth         = json_msg["depth"];
-	this->k_beam        = json_msg["k_beam"];
+	this->algo_type     = json_msg["k_beam"] ? K_BEAM : MINMAX_CLASSIC ;
 	potential_capture_value 	= POTENTIAL_CAPTURE_VALUE;
 
 	json response;
@@ -243,52 +239,24 @@ std::string		game_handler::AI_move_or_predict(void)
 	response["illegal"] = false;
 	response["cpu"]		= this->cpu;
 
+	std::pair<int, int> minmax_move_eval;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
+	minmax_move_eval 	= minimax_starter(this->s, this->depth, this->algo_type);
+	this->eval 			= minmax_move_eval.second;
 	if (this->cpu)
 	{
-		if (this->k_beam)
-		{
-			#ifdef SINGLE_THREAD
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth, &this->eval));
-			#else
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother_k_beam(s, this->depth, &this->eval));
-			#endif
-		}
-		else
-		{
-			#ifdef SINGLE_THREAD
-				this->s = this->s.make_baby_from_coord(minimax_single_fred(s, this->depth, std::deque<int>(), 0, BLACK_WIN, WHITE_WIN, &this->eval));
-			#else
-				this->s = this->s.make_baby_from_coord(minimax_fred_start_brother(s, this->depth, &this->eval));
-			#endif
-		}
-		response["type2"] = "AI_move";
-
-		if (PRINT_STATE_ON_MOVE)
-			this->s.print();
+		this->s  					= this->s.make_baby_from_coord(minmax_move_eval.first);
+		response["type2"] 			= "AI_move";
 	}
 	else
 	{
-		if (this->k_beam)
-		{
-			#ifdef SINGLE_THREAD
-				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth, &this->eval);
-			#else
-				response["suggested_move"] = minimax_fred_start_brother_k_beam(s, this->depth, &this->eval);
-			#endif
-		}
-		else
-		{
-			#ifdef SINGLE_THREAD
-				response["suggested_move"] = minimax_single_fred(s, this->depth, std::deque<int>(), 0, BLACK_WIN, WHITE_WIN, &this->eval);
-			#else
-				response["suggested_move"] = minimax_fred_start_brother(s, this->depth, &this->eval);
-			#endif
-		}
-		response["type2"] = "AI_move_suggestion";
-
+		response["suggested_move"]	= minmax_move_eval.first;
+		response["type2"] 			= "AI_move_suggestion";
 	}
+	if (PRINT_STATE_ON_MOVE)
+		this->s.print();
+
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     response["thinking_time"] = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
@@ -320,9 +288,10 @@ std::string		game_handler::handle_message(std::string msg)
     return ("Please send a valid JSON");
 }
 
-//------------------------------------------------------------------------------
 
-void do_session(tcp::socket& socket, ssl::context& ctx)
+//------------------------------------------------------------------------------
+#ifdef SSL
+void 	do_session(tcp::socket& socket, ssl::context& ctx)
 {
     try
     {
@@ -388,9 +357,8 @@ void do_session(tcp::socket& socket, ssl::context& ctx)
     }
 }
 
-//------------------------------------------------------------------------------
 
-void run_websocket_server(std::string adress, int porto)
+void 	run_websocket_server_tls(std::string adress, int porto)
 {
     try
     {
@@ -448,107 +416,122 @@ void run_websocket_server(std::string adress, int porto)
     }
 }
 
-// void
-// do_session(tcp::socket socket, ssl::context& ctx)
-// {
-//     try
-//     {
-//         // Construct the websocket stream around the socket
-//         websocket::stream<beast::ssl_stream<tcp::socket&>> ws{socket, ctx};
 
-//         // Perform the SSL handshake
-//         ws.next_layer().handshake(ssl::stream_base::server);
+//------------------------------------------------------------------------------
+#else
+void	do_session_unsafe(tcp::socket socket)
+{
+    try
+    {
+        // Construct the stream by moving in the socket
+        websocket::stream<tcp::socket> ws{std::move(socket)};
 
-//         // Set a decorator to change the Server of the handshake
-//         ws.set_option(websocket::stream_base::decorator(
-//             [](websocket::response_type& res)
-//             {
-//                 res.set(http::field::server,
-//                     std::string(BOOST_BEAST_VERSION_STRING) +
-//                         " websocket-server-sync-ssl");
-//             }));
+        // Set a decorator to change the Server of the handshake
+        ws.set_option(websocket::stream_base::decorator(
+            [](websocket::response_type& res)
+            {
+                res.set(http::field::server," websocket-server-gomoku");
+            }));
 
-//         // Accept the websocket handshake
-//         ws.accept();
+        // Accept the websocket handshake
+        ws.accept();
+		std::cout << "Websocket Connection accepted" << std::endl;
+        game_handler game = game_handler();
+        for(;;)
+        {
+            // This buffer will hold the incoming message
+            beast::flat_buffer buffer;
+            beast::flat_buffer reply_buffer;
+            beast::flat_buffer reply_buffer2;
 
-//         for(;;)
-//         {
-//             // This buffer will hold the incoming message
-//             beast::flat_buffer buffer;
+            std::string msg;
 
-//             // Read a message
-//             ws.read(buffer);
+            // Read a message
+            ws.read(buffer);
 
-//             // Echo the message back
-//             ws.text(ws.got_text());
-//             ws.write(buffer.data());
-//         }
-//     }
-//     catch(beast::system_error const& se)
-//     {
-//         // This indicates that the session was closed
-//         if(se.code() != websocket::error::closed)
-//             std::cerr << "Error: " << se.code().message() << std::endl;
-//     }
-//     catch(std::exception const& e)
-//     {
-//         std::cerr << "Error: " << e.what() << std::endl;
-//     }
-// }
+            // Echo the message back
+            ws.text(ws.got_text());
 
-// //------------------------------------------------------------------------------
+            msg = beast::buffers_to_string(buffer.data());
+            std::cout << "Recieved message:\n ------------\n" << msg << "\n------------" << std::endl;
 
-// int runino()
-// {
-//     try
-//     {
-//         // Check command line arguments.
-//         auto const address = net::ip::make_address("0.0.0.0");
-//         auto const port = static_cast<unsigned short>(16784);
+            ostream(reply_buffer) << game.handle_message(msg);
+            ws.write(reply_buffer.data());
 
-//         // The io_context is required for all I/O
-//         net::io_context ioc{1};
+			if (game.waiting_on_AI and not game.is_game_over())
+			{
+				ostream(reply_buffer2) << game.AI_move_or_predict();
+				ws.write(reply_buffer2.data());
+			}
 
-//         // The SSL context is required, and holds certificates
-//         ssl::context ctx{ssl::context::tlsv12};
+            // ws.write(response);
+        }
+    }
+    catch(beast::system_error const& se)
+    {
+        // This indicates that the session was closed
+        if(se.code() != websocket::error::closed)
+            std::cerr << "Error: " << se.code().message() << std::endl;
+		std::cout << "Websocket Connection closed" << std::endl;
+    }
+    catch(std::exception const& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
 
-// 		ctx.set_password_callback(
-// 			[](std::size_t,
-// 				boost::asio::ssl::context_base::password_purpose)
-// 			{
-// 				return "test";
-// 			});
 
-// 		ctx.set_options(
-// 			boost::asio::ssl::context::default_workarounds |
-// 			boost::asio::ssl::context::no_sslv2 |
-// 			boost::asio::ssl::context::single_dh_use);
+void 	run_websocket_server_unsafe(std::string adress, int porto)
+{
+    try
+    {
+        std::cout << "porto: " << porto << std::endl;
+        auto const address = net::ip::make_address(adress);
+        unsigned short const port = static_cast<unsigned short>(porto);
+        std::cout << "This server does not use TLS and communicates in plaintext" << std::endl;
+        std::cout << "Starting WebSocket Server on adress: " << address << ":" << port << std::endl;
 
-// 		ctx.use_certificate_chain_file("newcert.pem");
+        // The io_context is required for all I/O
+        net::io_context ioc{1};
+        // The acceptor receives incoming connections
+        tcp::acceptor acceptor{ioc, {address, port}};
+        for(;;)
+        {
+            // This will receive the new connection
+            tcp::socket socket{ioc};
 
-// 		ctx.use_private_key_file("privkey.pem",boost::asio::ssl::context::file_format::pem);
+            // Block until we get a connection
+            acceptor.accept(socket);
+		    std::cout << "Websocket Connection attempt from: " << socket.remote_endpoint() << " to: " << socket.local_endpoint() << std::endl;
+            
 
-// 		ctx.use_tmp_dh_file("dh512.pem");
+            // Launch the session, transferring ownership of the socket
+            std::thread(
+                &do_session_unsafe,
+                std::move(socket)).detach();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return;
+    }
+}
+#endif
 
-//         tcp::acceptor acceptor{ioc, {address, port}};
-//         for(;;)
-//         {
-//             // This will receive the new connection
-//             tcp::socket socket{ioc};
 
-//             // Block until we get a connection
-//             acceptor.accept(socket);
-
-//             // Launch the session, transferring ownership of the socket
-//             std::thread(
-//                 &do_session,
-//                 std::move(socket),
-//                 std::ref(ctx)).detach();
-//         }
-//     }
-//     catch (const std::exception& e)
-//     {
-//         std::cerr << "Error: " << e.what() << std::endl;
-//         return EXIT_FAILURE;
-//     }
-// }
+/**
+ * @brief Starts the gomoku server. ws or wss depends on the SSL define
+ * multiple concurrent connections are possible.
+ * 
+ * @param adress should be 0.0.0.0
+ * @param porto  The port number to listen on.
+ */
+void 	run_websocket_server(std::string adress, int porto)
+{
+	#ifdef SSL
+		run_websocket_server_tls(adress, porto);
+	#else
+		run_websocket_server_unsafe(adress, porto);
+	#endif
+}

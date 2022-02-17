@@ -1070,8 +1070,28 @@ int			minimax_fred_start_brother_k_beam(State state, int limit, int *out_eval)
 	}
 }
 
-
-// std::pair<int, int> minimax_starter(State state, int limit, int type)
-// {
-
-// }
+/**
+ * @brief launches the single or multi threaded minmax determined by #SINGLE_THREAD
+ * 
+ * @param state root state
+ * @param limit max depth
+ * @param type MINMAX_CLASSIC or MINMAX_BEAM the type of algorithm
+ * @return std::pair<int, int> = <best move, eval>
+ */
+std::pair<int, int> minimax_starter(State state, int limit, int type)
+{
+	std::pair<int, int> ret; // move, eval
+	if (type == MINMAX_CLASSIC)
+	{
+		#ifdef SINGLE_TREAD
+			ret.first = minimax_single_fred(state, limit, std::deque<int>(), 0, BLACK_WIN, WHITE_WIN, &ret.second);
+		#else
+			ret.first = minimax_fred_start_brother(state, limit, &ret.second);
+		#endif
+	}
+	else
+	{
+		ret.first = minimax_fred_start_brother_k_beam(state, limit, &ret.second);
+	}
+	return ret;
+}
